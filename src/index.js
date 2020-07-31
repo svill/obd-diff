@@ -1,3 +1,4 @@
+var config = require('dotenv').config();
 var OBDReader = require('../lib/obd.js');
 var btOBDReader = new OBDReader();
 var dataReceivedMarker = {};
@@ -25,5 +26,4 @@ btOBDReader.on('dataReceived', function (data) {
 });
 
 console.log('Connecting...')
-// Use first device with 'obd' in the name
-btOBDReader.autoconnect('obd');
+btOBDReader.connect(process.env.OBD_ADDRESS, process.env.OBD_CHANNEL);
