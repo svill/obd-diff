@@ -1,4 +1,4 @@
-var OBDReader = require('bluetooth-obd');
+var OBDReader = require('../lib/obd.js');
 var btOBDReader = new OBDReader();
 var dataReceivedMarker = {};
 
@@ -13,6 +13,10 @@ btOBDReader.on('connected', function () {
     this.addPoller("frp");
 
     this.startPolling(1000); //Request all values each second.
+});
+
+btOBDReader.on('debug', function (data) {
+    console.log("DEBUG:" + data);
 });
 
 btOBDReader.on('dataReceived', function (data) {
