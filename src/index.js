@@ -4,25 +4,19 @@ var btOBDReader = new OBDReader();
 var dataReceivedMarker = {};
 
 btOBDReader.on('connected', function () {
-    //this.requestValueByName("vss"); //vss = vehicle speed sensor
-
-    this.addPoller("vss");
-    this.addPoller("rpm");
     this.addPoller("temp");
-    this.addPoller("load_pct");
-    this.addPoller("map");
-    this.addPoller("frp");
-
     this.startPolling(1000); //Request all values each second.
 });
 
-btOBDReader.on('debug', function (data) {
-    console.log("DEBUG:" + data);
+btOBDReader.on('dataReceived', function (data) {
+    if (Object.keys(data).length !== 0) {
+      console.log(data);
+    }
+    dataReceivedMarker = data;
 });
 
-btOBDReader.on('dataReceived', function (data) {
-    console.log(data);
-    dataReceivedMarker = data;
+btOBDReader.on('messageReceived', function (data) {
+    console.log("MSG: " + data);
 });
 
 console.log('Connecting...')
