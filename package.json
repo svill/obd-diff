@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter list --recursive"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "dependencies": {
     "bluetooth-obd": "^0.2.4",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.1"
   }
 }
