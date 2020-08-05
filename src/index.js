@@ -5,6 +5,7 @@ var dataReceivedMarker = {};
 
 btOBDReader.on('connected', function () {
     this.addPoller("temp");
+    this.addPoller("catemp11");
     this.startPolling(1000); //Request all values each second.
 });
 
