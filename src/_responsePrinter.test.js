@@ -1,5 +1,5 @@
-const ResponsePrinter = require('./ResponsePrinter');
-const ObdResponseLine = require('./ObdResponseLine');
+const ResponsePrinter = require('./responsePrinter');
+const Response = require('./response');
 const colors = require('colors');
 
 describe('output', () => {
@@ -34,10 +34,10 @@ describe('print raw', () => {
   });
 });
 
-describe('print ObdResponseLine', () => {
-  test('should print red styling when there is a difference 2', () => {
+describe('print Response', () => {
+  test('should print red styling when there is a difference in a response', () => {
     const printer = ResponsePrinter.createNull()
-    printer.print(ObdResponseLine('abcdefghi').compare('abczzzghi'));
+    printer.print(Response('abcdefghi').compare('abczzzghi'));
     expect(printer.getLastOutput()).toBe("abc" + colors.red("zzz") + "ghi");
   });
 });

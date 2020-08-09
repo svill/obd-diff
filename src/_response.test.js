@@ -1,29 +1,29 @@
-const ObdResponseLine = require('./ObdResponseLine');
+const Response = require('./response');
 
 describe('compare', () => {
   test('should return empty when comparing empty values', () => {
-    expect(ObdResponseLine('').compare(''))
+    expect(Response('').compare(''))
       .toEqual([
         { value: '', diff: false }
       ]);
   });
 
   test('should return single identical char', () => {
-    expect(ObdResponseLine('a').compare('a'))
+    expect(Response('a').compare('a'))
       .toEqual([
         { value: 'a', diff: false }
       ]);
   });
 
   test('should return single identical string', () => {
-    expect(ObdResponseLine('abc').compare('abc'))
+    expect(Response('abc').compare('abc'))
       .toEqual([
         { value: 'abc', diff: false } 
       ]);
   });
 
   test('should return with differing char', () => {
-    expect(ObdResponseLine('abc').compare('azc'))
+    expect(Response('abc').compare('azc'))
       .toEqual([
         { value: 'a', diff: false },
         { value: 'z', diff: true },
