@@ -15,10 +15,10 @@ module.exports = class ResponsePrinter {
     return new ResponsePrinter(new NullConsole());
   };
 
-  print(obdResponse) {
-    const styledText = obdResponse.reduce((acc, part) => 
+  print(response) {
+    const styledText = response.reduce((acc, part) => 
       acc + (part.diff ? this.addStyledText(part.value) : part.value), "");
-    if (styledText) this.output(styledText)
+    this.output(styledText)
   }
 
   addStyledText(text) {

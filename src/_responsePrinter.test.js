@@ -10,34 +10,22 @@ describe('output', () => {
   });
 });
 
-describe('print raw', () => {
+describe('print', () => {
   test('should not print anything when there is nothing to print', () => {
     const printer = ResponsePrinter.createNull()
-    printer.print([]);
-    expect(printer.getLastOutput()).toBeUndefined();
+    printer.print(Response('').compare(''));
+    expect(printer.getLastOutput()).toBe('');
   }); 
 
   test('should not print styling when there are no differences', () => {
     const printer = ResponsePrinter.createNull()
-    printer.print([ { value:'abc', diff: false } ] );
+    printer.print(Response('abc').compare('abc'));
     expect(printer.getLastOutput()).toBe("abc");
   });
 
-  test('should print red styling when there is a difference', () => {
+  test('should print different text with red styling', () => {
     const printer = ResponsePrinter.createNull()
-    printer.print([ 
-      { value:'abc', diff: false },
-      { value:'def', diff: true },
-      { value:'ghi', diff: false },
-    ]);
-    expect(printer.getLastOutput()).toBe("abc" + colors.red("def") + "ghi");
-  });
-});
-
-describe('print Response', () => {
-  test('should print red styling when there is a difference in a response', () => {
-    const printer = ResponsePrinter.createNull()
-    printer.print(Response('abcdefghi').compare('abczzzghi'));
-    expect(printer.getLastOutput()).toBe("abc" + colors.red("zzz") + "ghi");
+    printer.print(Response('abcdefghi').compare('abc123ghi'));
+    expect(printer.getLastOutput()).toBe("abc" + colors.red("123") + "ghi");
   });
 });
