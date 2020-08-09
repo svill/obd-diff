@@ -19,6 +19,7 @@
   "homepage": "https://github.com/svill/obd-diff#readme",
   "dependencies": {
     "bluetooth-obd": "^0.2.4",
+    "colors": "^1.4.0",
     "diff": "^4.0.2",
     "dotenv": "^8.2.0"
   },
