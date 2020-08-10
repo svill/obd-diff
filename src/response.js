@@ -1,6 +1,6 @@
 var jsdiff = require('diff');
 
-const ObdResponseLine = (response) => {
+const Response = (response) => {
   
   const compare = (val) => {
     const diff = jsdiff.diffChars(response, val);
@@ -17,4 +17,4 @@ const ObdResponseLine = (response) => {
   }
 }
 
-module.exports = ObdResponseLine
+module.exports = Response
