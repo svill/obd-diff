@@ -1,5 +1,5 @@
 var config = require('dotenv').config();
-var OBDReader = require('../lib/obd.js');
+var OBDReader = require('../../lib/obd.js');
 var btOBDReader = new OBDReader();
 var dataReceivedMarker = {};
 
