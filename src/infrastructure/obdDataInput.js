@@ -1,35 +1,36 @@
 const OBDReader = require('../../lib/obd.js');
+const config = require('dotenv').config();
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
-module.exports = class ObdDataInput {
-  static createNull(callback) {
-    return new ObdDataInput(new ObdDataInputNull(callback));
-  }
-
-  static create() {
-    return new ObdDataInput(new OBDReader(/* takes callback */));
+module.exports = class ObdDataInput extends EventEmitter {
+  static createNull() {
+    return new ObdDataInput(new NullObdDevice());
   }
 
   constructor(obd) {
+    super();
     this._obd = obd;
+
+    this._obd.on('connected', () => {
+      _this._handleConnected();
+    });
   }
 
-  input(data) {
-    this._obd.onDataReceived(data);
-    this._lastInput = data;
+  simulateConnect() {
+    this._handleConnected();
   }
 
-  getLastInput() {
-    return this._lastInput;
+  _handleConnected() {
+    this._obd.connected = true;
+    this.emit('myConnected');
+  }
+
+  isConnected() {
+    return this._obd.connected;
   }
 };
 
-class ObdDataInputNull {
-  constructor(callback) {
-    this._callback = callback;
-    console.log(this._callback);
-  }
+class NullObdDevice extends EventEmitter {
 
-  onDataReceived(data) { 
-    this._callback.apply(data); 
-  }
 }

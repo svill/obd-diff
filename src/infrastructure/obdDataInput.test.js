@@ -1,16 +1,17 @@
 const ObdDataInput = require('./obdDataInput')
 
 describe('ObdDataInput', () => {
-  test('remembers last send state', () => {
-    const obd = ObdDataInput.createNull(() => {})
-    obd.input('my input')
-    expect(obd.getLastInput()).toBe('my input')
-  });
+  describe('connect', () => {
+    test('should forward connected event when obd device connects', () => {
+      const obd = ObdDataInput.createNull();
+      obd.on('myConnected', () => {
+        triggeredConnected = true;
+      });
 
-  test('should invoke callback function on data received', () => {
-    let invoked = false;
-    const obd = ObdDataInput.createNull(() => { invoked = true });
-    obd.input('my input');
-    expect(invoked).toBe(true);
+      obd.simulateConnect();
+      
+      expect(triggeredConnected).toBe(true);
+      expect(obd.isConnected()).toBe(true);
+    });
   });
 });
