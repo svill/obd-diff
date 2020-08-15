@@ -1,6 +1,6 @@
 module.exports = class CommandLine {
   static createNull() {
-    return new CommandLine(new NoOpConsole());
+    return new CommandLine(new NullConsole());
   }
 
   static create() {
@@ -21,6 +21,6 @@ module.exports = class CommandLine {
   }
 };
 
-class NoOpConsole {
+class NullConsole {
   log() {}
 }
