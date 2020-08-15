@@ -1,9 +1,9 @@
-const ObdDataInput = require('./obdDataInput')
+const ObdDevice = require('./obdDevice')
 
-describe('ObdDataInput', () => {
+describe('ObdDevice', () => {
   describe('connect', () => {
     test('should forward connected event when obd device connects', () => {
-      const obd = ObdDataInput.createNull();
+      const obd = ObdDevice.createNull();
       obd.on('myConnected', () => {
         triggeredConnected = true;
       });

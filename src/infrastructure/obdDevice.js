@@ -3,9 +3,9 @@ const config = require('dotenv').config();
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 
-module.exports = class ObdDataInput extends EventEmitter {
+module.exports = class ObdDevice extends EventEmitter {
   static createNull() {
-    return new ObdDataInput(new NullObdDevice());
+    return new ObdDevice(new NullObdDevice());
   }
 
   constructor(obd) {
