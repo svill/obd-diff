@@ -13,5 +13,14 @@ describe('ObdDevice', () => {
       expect(eventTriggered).toBe(true);
       expect(obd.isConnected()).toBe(true);
     });
+
+    test('should connect with env var address and channel', () => {
+      const obd = ObdDevice.createNull('my_address', 10);
+
+      obd.connect();
+      
+      expect(obd.getAddress()).toBe('my_address');
+      expect(obd.geChannel()).toBe(10);
+    });
   });
 });
