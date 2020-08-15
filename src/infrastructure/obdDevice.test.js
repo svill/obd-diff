@@ -5,12 +5,12 @@ describe('ObdDevice', () => {
     test('should forward connected event when obd device connects', () => {
       const obd = ObdDevice.createNull();
       obd.on('myConnected', () => {
-        triggeredConnected = true;
+        eventTriggered = true;
       });
 
-      obd.simulateConnect();
+      obd.connect();
       
-      expect(triggeredConnected).toBe(true);
+      expect(eventTriggered).toBe(true);
       expect(obd.isConnected()).toBe(true);
     });
   });

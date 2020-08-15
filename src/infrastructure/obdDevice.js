@@ -1,7 +1,7 @@
 const OBDReader = require('../../lib/obd.js');
-const config = require('dotenv').config();
 var EventEmitter = require('events').EventEmitter;
-var util = require('util');
+
+const OBD_READER_EVENT_CONNECTED = 'connected';
 
 module.exports = class ObdDevice extends EventEmitter {
   static createNull() {
@@ -12,18 +12,13 @@ module.exports = class ObdDevice extends EventEmitter {
     super();
     this._obd = obd;
 
-    this._obd.on('connected', () => {
-      _this._handleConnected();
+    this._obd.on(OBD_READER_EVENT_CONNECTED, () => {
+      this.emit('myConnected');
     });
   }
 
-  simulateConnect() {
-    this._handleConnected();
-  }
-
-  _handleConnected() {
-    this._obd.connected = true;
-    this.emit('myConnected');
+  connect() {
+    this._obd.connect();
   }
 
   isConnected() {
@@ -32,5 +27,8 @@ module.exports = class ObdDevice extends EventEmitter {
 };
 
 class NullObdDevice extends EventEmitter {
-
+  connect() {
+    this.connected = true;
+    this.emit(OBD_READER_EVENT_CONNECTED);
+  }
 }
