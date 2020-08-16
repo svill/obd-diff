@@ -10,26 +10,45 @@ describe('ResponseState', () => {
   describe('update', () => {
     const RESPONSE1 = '7E807610224334D35CE';
     const RESPONSE2 = '7E906414000C800C8'
+    const RESPONSE1_MODIFIED = '7E807610224334D00FF';
 
     test('should add response when given a response', () => {
       const responseState = new ResponseState();
+
       responseState.update(Response(RESPONSE1));
+
+      expect(responseState.getState().size).toBe(1);
       expect(responseState.getState()).toEqual(new Map([
         ['7E02102', [RESPONSE1]]
       ]));
-      expect(responseState.getState().size).toBe(1);
     });
   
-    test('should update response when given existing response', () => {
+    test('should discard response if it is the same', () => {
       const responseState = new ResponseState();
+
       responseState.update(Response(RESPONSE1));
       responseState.update(Response(RESPONSE2));
       responseState.update(Response(RESPONSE1));
+
+      expect(responseState.getState().size).toBe(2);
       expect(responseState.getState()).toEqual(new Map([
         ['7E02102', [RESPONSE1]],
         ['7E10140', [RESPONSE2]],
       ]));
+    });
+
+    test('should store history of previous response if different', () => {
+      const responseState = new ResponseState();
+
+      responseState.update(Response(RESPONSE1));
+      responseState.update(Response(RESPONSE2));
+      responseState.update(Response(RESPONSE1_MODIFIED));
+
       expect(responseState.getState().size).toBe(2);
+      expect(responseState.getState()).toEqual(new Map([
+        ['7E02102', [RESPONSE1_MODIFIED, RESPONSE1]],
+        ['7E10140', [RESPONSE2]],
+      ]));      
     });
   });
 })
