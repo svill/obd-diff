@@ -1,40 +1,12 @@
 const Response = require('./response');
 
-describe('compare', () => {
-  test('should return empty when comparing empty values', () => {
-    expect(Response('').compare(''))
-      .toEqual([
-        { value: '', diff: false }
-      ]);
-  });
-
-  test('should return single identical char', () => {
-    expect(Response('a').compare('a'))
-      .toEqual([
-        { value: 'a', diff: false }
-      ]);
-  });
-
-  test('should return single identical string', () => {
-    expect(Response('abc').compare('abc'))
-      .toEqual([
-        { value: 'abc', diff: false } 
-      ]);
-  });
-
-  test('should return with differing char', () => {
-    expect(Response('abc').compare('azc'))
-      .toEqual([
-        { value: 'a', diff: false },
-        { value: 'z', diff: true },
-        { value: 'c', diff: false }
-      ]);
-  });
-});
-
 describe('Response', () => {
   const RESPONSE1 = '7E807610224334D35CE';
   const RESPONSE2 = '7E906414000C800C8'
+
+  test('get response from value', () => {
+    expect(Response(RESPONSE1).value).toBe(RESPONSE1);
+  })
 
   describe('getHeader', () => {
     test('should get ecu 0 when given header of 7E8', () => {
@@ -76,4 +48,35 @@ describe('Response', () => {
     });
   });
 
+  describe('compare', () => {
+    test('should return empty when comparing empty values', () => {
+      expect(Response('').compare(''))
+        .toEqual([
+          { value: '', diff: false }
+        ]);
+    });
+  
+    test('should return single identical char', () => {
+      expect(Response('a').compare('a'))
+        .toEqual([
+          { value: 'a', diff: false }
+        ]);
+    });
+  
+    test('should return single identical string', () => {
+      expect(Response('abc').compare('abc'))
+        .toEqual([
+          { value: 'abc', diff: false } 
+        ]);
+    });
+  
+    test('should return with differing char', () => {
+      expect(Response('abc').compare('azc'))
+        .toEqual([
+          { value: 'a', diff: false },
+          { value: 'z', diff: true },
+          { value: 'c', diff: false }
+        ]);
+    });
+  });
 });
