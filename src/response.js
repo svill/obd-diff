@@ -12,8 +12,16 @@ const Response = (response) => {
       });
   }
 
+  const getPid = () => {
+    const modeRx = response.substr(7, 2);
+    const pidRx = response.substr(9, 2);
+    const modeOrig = modeRx - 40;
+    return modeOrig + pidRx;
+  }
+
   return {
     compare,
+    getPid,
   }
 }
 

@@ -31,3 +31,9 @@ describe('compare', () => {
       ]);
   });
 });
+
+describe('getPid', () => {
+  test('should get PID from response with headers ON', () => {
+    expect(Response('7E9100C610200000000').getPid()).toBe('2102');
+  });
+});
