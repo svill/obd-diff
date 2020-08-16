@@ -12,16 +12,30 @@ const Response = (response) => {
       });
   }
 
-  const getPid = () => {
-    const modeRx = response.substr(7, 2);
-    const pidRx = response.substr(9, 2);
-    const modeOrig = modeRx - 40;
-    return modeOrig + pidRx;
+  const getEcu = () => {    
+    ecuRx = response.substr(2, 1);
+    const ecuOrig = ecuRx - 8;
+    return response.substr(0, 2).concat(ecuOrig);
   }
+
+  const getMode = () => {    
+    modeRx = response.substr(5, 2);
+    const modeOrig = modeRx - 40;
+    return modeOrig.toString().padStart(2, 0);
+  }
+
+  const getPid = () => {    
+    return response.substr(7, 2);
+  }
+
+  const getId = () => { return getEcu() + getMode() + getPid(); }
 
   return {
     compare,
+    getEcu,
+    getMode,
     getPid,
+    getId,
   }
 }
 

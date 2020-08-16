@@ -32,8 +32,48 @@ describe('compare', () => {
   });
 });
 
-describe('getPid', () => {
-  test('should get PID from response with headers ON', () => {
-    expect(Response('7E9100C610200000000').getPid()).toBe('2102');
+describe('Response', () => {
+  const RESPONSE1 = '7E807610224334D35CE';
+  const RESPONSE2 = '7E906414000C800C8'
+
+  describe('getHeader', () => {
+    test('should get ecu 0 when given header of 7E8', () => {
+      expect(Response(RESPONSE1).getEcu()).toBe('7E0');
+    });
+  
+    test('should get ecu 1 when given header of 7E9', () => {
+      expect(Response(RESPONSE2).getEcu()).toBe('7E1');
+    });
   });
+  
+  describe('getMode', () => {
+    test('should get mode 21 from response', () => {
+      expect(Response(RESPONSE1).getMode()).toBe('21');
+    });
+  
+    test('should get mode 01 from response', () => {
+      expect(Response(RESPONSE2).getMode()).toBe('01');
+    });
+  });
+  
+  describe('getPid', () => {
+    test('should get PID 02 from response', () => {
+      expect(Response(RESPONSE1).getPid()).toBe('02');
+    });
+  
+    test('should get PID 40 from response', () => {
+      expect(Response(RESPONSE2).getPid()).toBe('40');
+    });
+  });
+  
+  describe('getId', () => {
+    test('should get Id from response', () => {
+      expect(Response(RESPONSE1).getId()).toBe('7E02102');
+    });
+  
+    test('should get Id from response', () => {
+      expect(Response(RESPONSE2).getId()).toBe('7E10140');
+    });
+  });
+
 });
