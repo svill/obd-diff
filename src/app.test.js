@@ -12,6 +12,14 @@ describe('Application', () => {
     expect(obd.isConnected()).toBe(true);
   });
 
+  test('should send AT config once connected', () => {
+    const obd = ObdDevice.createNull('my_address', 10);
+    const app = new App(null, obd);
+    app.run();
+
+    expect(obd.getLastWrite()).toBe("ATH1");
+  });
+
   test('should print obd data response to console', () => {
     const obd = ObdDevice.createNull('my_address', 10);
     const cli = CommandLine.createNull();

@@ -10,6 +10,9 @@ module.exports = class App {
   }
 
   run() {
+    this.obd.on('myConnected', () => {
+      this.obd.write('ATH1');
+    });
     this.obd.connect();
 
     this.obd.on('myMessageReceived', (data) => {
