@@ -32,4 +32,14 @@ describe('ObdDevice', () => {
       expect(messageData).toBe('my_data');
     });
   });
+
+  describe('write', () => {
+    test('should write to OBD device', () => {
+      const obd = ObdDevice.createNull();
+
+      obd.write('my_message');
+      
+      expect(obd.getLastWrite()).toBe('my_message');
+    });
+  });
 });

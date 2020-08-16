@@ -49,6 +49,13 @@ module.exports = class ObdDevice extends EventEmitter {
   isConnected() { return this._obd.connected; }
   getAddress() { return this._obd.address; }
   geChannel() { return this._obd.channel }
+
+  write(message) {
+    this._obd.write(message);
+    this._lastWrite = message;
+  }
+
+  getLastWrite() { return this._lastWrite; }
 };
 
 class NullObdDevice extends EventEmitter {
@@ -58,6 +65,8 @@ class NullObdDevice extends EventEmitter {
     this.channel = channel;
     this.emit(OBD_READER_EVENT_CONNECTED);
   }
+
+  write(message) { }
 }
 
 class NullProcess {
