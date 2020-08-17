@@ -4,10 +4,9 @@ var btOBDReader = new OBDReader();
 var dataReceivedMarker = {};
 
 btOBDReader.on('connected', function () {
-    sleep(3000).then(() => {
-        console.log('My Setup')
+        this.write("ATE1");
         this.write('ATH1');
-        this.write("ATE1")
+
         //this.addPoller("temp");
         //this.addPoller("catemp11");
         this.addPollerString("2101")
@@ -16,7 +15,6 @@ btOBDReader.on('connected', function () {
         this.addPollerString("21E0")
 
         this.startPolling(1000); //Request all values each second.
-    });
 });
 
 function sleep (time) {
@@ -34,7 +32,7 @@ function sleep (time) {
 //     console.log("MSG: " + data);
 // });
 
-btOBDReader.on('messagesReceived', function (data) {
+btOBDReader.on('responseReceived', function (data) {
     console.log("Msgs (" + data.length + "): " + "***" + data + "***");
 });
 
