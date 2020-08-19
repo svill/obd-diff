@@ -22,14 +22,14 @@ describe('ObdDevice', () => {
     });
   });
 
-  describe('message received', () => {
-    test('should forward message received event when obd device receives data', () => {
+  describe('responseReceived event', () => {
+    test('should forward response received event when obd device receives data', () => {
       const obd = ObdDevice.createNull();
-      obd.on('myMessageReceived', (data) => { messageData = data; });
+      obd.on('myResponseReceived', (data) => { responseData = data; });
 
-      obd.simulateMessageReceived('my_data');
+      obd.simulateResponseReceived('my_data');
       
-      expect(messageData).toBe('my_data');
+      expect(responseData).toBe('my_data');
     });
   });
 

@@ -15,7 +15,7 @@ module.exports = class App {
     });
     this.obd.connect();
 
-    this.obd.on('myMessageReceived', (data) => {
+    this.obd.on('myResponseReceived', (data) => {
       const response = Frame('7E8 07 6113 02 14 B9 02 03').compare(data);
       this.printer.print(response);
     });

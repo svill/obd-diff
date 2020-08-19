@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var config = require('dotenv').config();
 
 const OBD_READER_EVENT_CONNECTED = 'connected';
-const OBD_READER_EVENT_MSG_RECEIVED = 'messageReceived';
+const OBD_READER_EVENT_RESPONSE_RECEIVED = 'responseReceived';
 
 module.exports = class ObdDevice extends EventEmitter {
   static createNull(address, channel) {
@@ -19,7 +19,7 @@ module.exports = class ObdDevice extends EventEmitter {
     this._obd = obd;
     this._process = process;
     this._listenForObdConnect();
-    this._listenForObdMsgReceived();
+    this._listenForObdResponseReceived();
   }
 
   _listenForObdConnect() {
@@ -28,18 +28,18 @@ module.exports = class ObdDevice extends EventEmitter {
     });
   }
 
-  _listenForObdMsgReceived() {
-    this._obd.on(OBD_READER_EVENT_MSG_RECEIVED, (data) => {
-      this._handleMessageReceived(data);
+  _listenForObdResponseReceived() {
+    this._obd.on(OBD_READER_EVENT_RESPONSE_RECEIVED, (data) => {
+      this._handleResponseReceived(data);
     });
   }
 
-  simulateMessageReceived(data) {
-    this._handleMessageReceived(data);
+  simulateResponseReceived(data) {
+    this._handleResponseReceived(data);
   }
 
-  _handleMessageReceived(data) {
-    this.emit('myMessageReceived', data);
+  _handleResponseReceived(data) {
+    this.emit('myResponseReceived', data);
   } 
 
   connect() {
