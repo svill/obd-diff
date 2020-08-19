@@ -1,27 +1,27 @@
 var jsdiff = require('diff');
 
-const Response = (response) => {
+const Frame = (frame) => {
 
   const getEcu = () => {    
-    ecuRx = response.substr(2, 1);
+    ecuRx = frame.substr(2, 1);
     const ecuOrig = ecuRx - 8;
-    return response.substr(0, 2).concat(ecuOrig);
+    return frame.substr(0, 2).concat(ecuOrig);
   }
 
   const getMode = () => {    
-    modeRx = response.substr(5, 2);
+    modeRx = frame.substr(5, 2);
     const modeOrig = modeRx - 40;
     return modeOrig.toString().padStart(2, 0);
   }
 
   const getPid = () => {
-    return response.substr(7, 2);
+    return frame.substr(7, 2);
   }
 
   const getId = () => { return getEcu() + getMode() + getPid(); }
 
   const compare = (val) => {
-    const diff = jsdiff.diffChars(response, val);
+    const diff = jsdiff.diffChars(frame, val);
     return diff.filter(x => !!x.removed == false)
       .map(part => { return { 
           'value': part.value,
@@ -36,8 +36,8 @@ const Response = (response) => {
     getMode,
     getPid,
     getId,
-    value: response,
+    value: frame,
   }
 }
 
-module.exports = Response
+module.exports = Frame
