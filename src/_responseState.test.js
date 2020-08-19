@@ -1,5 +1,5 @@
 const ResponseState = require('./responseState');
-const Frame = require('./frame');
+const Frame = require('./model/frame');
 
 describe('ResponseState', () => {
   test('should contain empty state when not given any response', () => {

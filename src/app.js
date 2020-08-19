@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 const ResponsePrinter = require('./responsePrinter');
-const Frame = require('./frame');
+const Frame = require('./model/frame');
 
 module.exports = class App {
   constructor(cli, obd) {
