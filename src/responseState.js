@@ -22,7 +22,6 @@ module.exports = class ResponseState {
   }
 
   _insertHistory(response, histories) {
-    console.log(response.getFrames())
     histories.unshift(...response.getFrames());
     this.state.set(response.getId(), histories)
   }

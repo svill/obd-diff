@@ -4,7 +4,7 @@ const Response = (response) => {
   const filteredFrames = response.split(',').filter(x => x.length)
 
   const getId = () => {
-    return filteredFrames[0];
+    return filteredFrames.length ? filteredFrames[0] : '';
   }
 
   const getFrames = () => {

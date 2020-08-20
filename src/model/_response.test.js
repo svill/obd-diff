@@ -10,6 +10,10 @@ describe('Response', () => {
   })
 
   describe('getId', () => {
+    test('should empty Id when response is empty', () => {
+      expect(Response('').getId()).toBe('');
+    })
+
     test('should get Id as first frame', () => {
       expect(Response(SINGLE_FRAME_RESPONSE).getId()).toBe('2102');
     })
@@ -20,6 +24,10 @@ describe('Response', () => {
   });
 
   describe('count', () => {
+    test('should return 0 when given empty', () => {
+      expect(Response('').count()).toBe(0);
+    })
+
     test('should count frames excluding the first', () => {
       expect(Response(SINGLE_FRAME_RESPONSE).count()).toBe(1);
     })
@@ -34,6 +42,10 @@ describe('Response', () => {
   });
 
   describe('getFrames', () => {
+    test('should return empty array when given empty response', () => {
+      expect(Response('').getFrames()).toEqual([]);
+    })
+
     test('should return frames without the first ECHO frame', () => {
       expect(Response(SINGLE_FRAME_RESPONSE).getFrames()).toEqual(['7E807610222374B38C9']);
     })
