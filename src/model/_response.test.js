@@ -50,10 +50,6 @@ describe('Response', () => {
   });
 
   describe('compare', () => {
-    const SINGLE_FRAME_RESPONSE = '2102,7E807610222374B38C9';
-    const SINGLE_FRAME_RESPONSE_WITH_EMPTY = '2102,7E807610222374B38C9,,';
-    const MULTI_FRAME_RESPONSE = '21E4,7E8100861E431000204,7E82164000000000000';
-
     test('should return empty when comparing empty values', () => {
       expect(Response('').compare(''))
         .toEqual([

@@ -13,7 +13,6 @@ module.exports = class ResponseState {
         this._insertHistory(response, histories); 
       }
     } else {
-
       this._setHistory(response);
     }
   }

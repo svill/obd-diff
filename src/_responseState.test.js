@@ -11,24 +11,12 @@ describe('ResponseState', () => {
     const RESPONSE1 = '2102,7E807610224334D35CE';
     const RESPONSE1_MODIFIED = '2102,7E807610224334D00FF';    
     const RESPONSE2 = '0140,7E906414000C800C8'
-
-    test('should add response when given a response', () => {
-      const responseState = new ResponseState();
-
-      responseState.update(Response(RESPONSE1));
-
-      expect(responseState.getState().size).toBe(1);
-      expect(responseState.getState()).toEqual(new Map([
-        ['2102', [RESPONSE1]]
-      ]));
-    });
-  
-    test('should discard response if it is the same', () => {
+ 
+    test('should add multiple responses', () => {
       const responseState = new ResponseState();
 
       responseState.update(Response(RESPONSE1));
       responseState.update(Response(RESPONSE2));
-      responseState.update(Response(RESPONSE1));
 
       expect(responseState.getState().size).toBe(2);
       expect(responseState.getState()).toEqual(new Map([
@@ -36,18 +24,28 @@ describe('ResponseState', () => {
         ['0140', [RESPONSE2]],
       ]));
     });
+  
+    test('should discard response if it is identical', () => {
+      const responseState = new ResponseState();
+
+      responseState.update(Response(RESPONSE1));
+      responseState.update(Response(RESPONSE1));
+
+      expect(responseState.getState().size).toBe(1);
+      expect(responseState.getState()).toEqual(new Map([
+        ['2102', [RESPONSE1]],
+      ]));
+    });
 
     test('should store history of previous response if different', () => {
       const responseState = new ResponseState();
 
       responseState.update(Response(RESPONSE1));
-      responseState.update(Response(RESPONSE2));
       responseState.update(Response(RESPONSE1_MODIFIED));
 
-      expect(responseState.getState().size).toBe(2);
+      expect(responseState.getState().size).toBe(1);
       expect(responseState.getState()).toEqual(new Map([
         ['2102', [RESPONSE1_MODIFIED, RESPONSE1]],
-        ['0140', [RESPONSE2]],
       ]));      
     });
   });
