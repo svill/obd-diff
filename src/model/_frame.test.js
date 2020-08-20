@@ -47,36 +47,4 @@ describe('Frame', () => {
       expect(Frame(FRAME2).getId()).toBe('7E10140');
     });
   });
-
-  describe('compare', () => {
-    test('should return empty when comparing empty values', () => {
-      expect(Frame('').compare(''))
-        .toEqual([
-          { value: '', diff: false }
-        ]);
-    });
-  
-    test('should return single identical char', () => {
-      expect(Frame('a').compare('a'))
-        .toEqual([
-          { value: 'a', diff: false }
-        ]);
-    });
-  
-    test('should return single identical string', () => {
-      expect(Frame('abc').compare('abc'))
-        .toEqual([
-          { value: 'abc', diff: false } 
-        ]);
-    });
-  
-    test('should return with differing char', () => {
-      expect(Frame('abc').compare('azc'))
-        .toEqual([
-          { value: 'a', diff: false },
-          { value: 'z', diff: true },
-          { value: 'c', diff: false }
-        ]);
-    });
-  });
 });

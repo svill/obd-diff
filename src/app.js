@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 const ResponsePrinter = require('./responsePrinter');
-const Frame = require('./model/frame');
+const Response = require('./model/response');
 
 module.exports = class App {
   constructor(cli, obd) {
@@ -16,7 +16,7 @@ module.exports = class App {
     this.obd.connect();
 
     this.obd.on('myResponseReceived', (data) => {
-      const response = Frame('7E8 07 6113 02 14 B9 02 03').compare(data);
+      const response = Response('7E8 07 6113 02 14 B9 02 03').compare(data);
       this.printer.print(response);
     });
   }
