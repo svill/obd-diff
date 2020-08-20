@@ -25,11 +25,16 @@ const Response = (response) => {
       });
   }
 
+  const equals = (response2) => {
+    return response == response2.value
+  }
+
   return {
     getId,
     getFrames,
     count,
     compare,
+    equals,
     value: response,
   }
 }

@@ -61,6 +61,30 @@ describe('Response', () => {
     })
   });
 
+  describe('equals', () => {
+    test('should be true when empty', () => {
+      expect(Response('').equals(Response(''))).toBeTruthy();
+    })
+
+    test('should be true when single frame response', () => {
+      expect(Response('pid,frame').equals(Response('pid,frame'))).toBeTruthy();
+    })
+
+    test('should be true when multiframe response', () => {
+      expect(Response('pid,frame1,frame2').equals(Response('pid,frame1,frame2'))).toBeTruthy();
+    })
+
+    test('should be false when frame is different response', () => {
+      expect(Response('pid,frame').equals(Response('pid,frameX'))).toBeFalsy();
+    })
+
+    test('should be false when pid is different response', () => {
+      expect(Response('pidX,frame').equals(Response('pid,frame'))).toBeFalsy();
+    })
+
+    // test('should be true when pid and frames are the same ignoring empty ones', () => {}
+  });
+
   describe('compare', () => {
     test('should return empty when comparing empty values', () => {
       expect(Response('').compare(''))
