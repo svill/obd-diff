@@ -16,7 +16,7 @@ module.exports = class App {
     this.obd.connect();
 
     this.obd.on('myResponseReceived', (data) => {
-      const response = Response('7E8 07 6113 02 14 B9 02 03').compare(data);
+      const response = Response('4102,7E8 07 6113 02 14 B9 02 03').compare(data);
       this.printer.print(response);
     });
   }

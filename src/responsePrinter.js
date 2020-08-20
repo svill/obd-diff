@@ -15,4 +15,13 @@ module.exports = class ResponsePrinter {
   addStyledText(text) {
     return colors.red(text)
   }
+
+  printTable(responseState) {
+    const map = responseState.getState();
+    let str = ''
+    map.forEach(function(value, key) {
+      str += key + " | " + value + "\n";
+    })
+    this._cli.output(str);
+  }
 };

@@ -22,12 +22,13 @@ module.exports = class ResponseState {
   }
 
   _insertHistory(response, histories) {
-    histories.unshift(response.value);
+    console.log(response.getFrames())
+    histories.unshift(...response.getFrames());
     this.state.set(response.getId(), histories)
   }
 
   _setHistory(response) {
-    this.state.set(response.getId(), [response.value])
+    this.state.set(response.getId(), response.getFrames())
   }
 
   getState() {

@@ -4,19 +4,12 @@ const colors = require('colors');
 const App = require('./app');
 
 describe('Application', () => {
-  test('should run and connect to obd device', () => {
-    const obd = ObdDevice.createNull('my_address', 10);
-    const app = new App(null, obd);
-    app.run();
-
-    expect(obd.isConnected()).toBe(true);
-  });
-
   test('should send AT config once connected', () => {
     const obd = ObdDevice.createNull('my_address', 10);
     const app = new App(null, obd);
     app.run();
 
+    expect(obd.isConnected()).toBe(true);
     expect(obd.getLastWrite()).toBe("ATH1");
   });
 
