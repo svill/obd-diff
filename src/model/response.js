@@ -15,7 +15,8 @@ const Response = (response) => {
     return getFrames().length;
   }
 
-  const compare = (val) => {
+  const compare = (response2) => {
+    const val = response2.getFrames().join()
     const diff = jsdiff.diffChars(response, val);
     return diff.filter(x => !!x.removed == false)
       .map(part => { return { 

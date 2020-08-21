@@ -87,43 +87,50 @@ describe('Response', () => {
 
   describe('compare', () => {
     test('should return empty when comparing empty values', () => {
-      expect(Response('').compare(''))
+      const emptyResponse = Response('')
+      expect(emptyResponse.compare(emptyResponse))
         .toEqual([
           { value: '', diff: false }
         ]);
     });
   
     test('should return single identical char', () => {
-      expect(Response('a').compare('a'))
+      const response = Response('pid,f')
+      expect(response.compare(response))
         .toEqual([
-          { value: 'a', diff: false }
+          { value: 'f', diff: false }
         ]);
     });
   
     test('should return single identical string', () => {
-      expect(Response('abc').compare('abc'))
+      const response = Response('pid,frame')
+      expect(response.compare(response))
         .toEqual([
-          { value: 'abc', diff: false } 
+          { value: 'frame', diff: false } 
         ]);
     });
   
     test('should return with differing char', () => {
-      expect(Response('abc').compare('azc'))
+      const response1 = Response('pid,frame')
+      const response2 = Response('pid,frXme')
+      expect(response1.compare(response2))
         .toEqual([
-          { value: 'a', diff: false },
-          { value: 'z', diff: true },
-          { value: 'c', diff: false }
+          { value: 'fr', diff: false },
+          { value: 'X', diff: true },
+          { value: 'me', diff: false }
         ]);
     });
 
     test('should return with differing portions', () => {
-      expect(Response('2102,7E807610222374B38C9').compare('2102,7E8076102AC374B42C9'))
+      const response1 = Response('pid,frame0frame0frame0frame0')
+      const response2 = Response('pid,framAAframBBframe0frame0')
+      expect(response1.compare(response2))
         .toEqual([
-          { value: '2102,7E8076102', diff: false },
-          { value: 'AC', diff: true },
-          { value: '374B', diff: false },
-          { value: '42', diff: true },
-          { value: 'C9', diff: false }
+          { value: 'fram', diff: false },
+          { value: 'AA', diff: true },
+          { value: 'fram', diff: false },
+          { value: 'BB', diff: true },
+          { value: 'frame0frame0', diff: false }
         ]);
     });
   });

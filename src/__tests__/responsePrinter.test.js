@@ -16,11 +16,11 @@ describe('print', () => {
 
   test('should not print styling when there are no differences', () => {
     const printer = new ResponsePrinter();
-    const response = Response('abc').compare('abc')
+    const response = Response('pid1,frame1').compare('pid1,frame1')
 
     const str = printer.print(response);
 
-    expect(str).toBe('abc');
+    expect(str).toBe('frame1');
   });
 
   test('should print different text with red styling', () => {
