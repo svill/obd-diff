@@ -6,7 +6,7 @@ module.exports = class App {
   constructor(cli, obd) {
     this.cli = cli;
     this.obd = obd;
-    this.printer = new ResponsePrinter(cli);
+    this.printer = new ResponsePrinter();
   }
 
   run() {
@@ -17,7 +17,8 @@ module.exports = class App {
 
     this.obd.on('myResponseReceived', (data) => {
       const response = Response('4102,7E8 07 6113 02 14 B9 02 03').compare(data);
-      this.printer.print(response);
+      const table = this.printer.print(response);
+      this.cli.output(table)
     });
   }
 };

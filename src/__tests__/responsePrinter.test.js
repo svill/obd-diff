@@ -6,33 +6,30 @@ const colors = require('colors');
 
 describe('print', () => {  
   test('should not print anything when there is nothing to print', () => {
-    const cli = CommandLine.createNull();
-    const printer = new ResponsePrinter(cli);
+    const printer = new ResponsePrinter();
     const response = Response('').compare('');
 
-    printer.print(response);
+    const str = printer.print(response);
 
-    expect(cli.getLastOutput()).toBe('');
+    expect(str).toBe('');
   }); 
 
   test('should not print styling when there are no differences', () => {
-    const cli = CommandLine.createNull();
-    const printer = new ResponsePrinter(cli);
+    const printer = new ResponsePrinter();
     const response = Response('abc').compare('abc')
 
-    printer.print(response);
+    const str = printer.print(response);
 
-    expect(cli.getLastOutput()).toBe('abc');
+    expect(str).toBe('abc');
   });
 
   test('should print different text with red styling', () => {
-    const cli = CommandLine.createNull();
-    const printer = new ResponsePrinter(cli);
+    const printer = new ResponsePrinter();
     const response = Response('abcdefghi').compare('abc123ghi')
 
-    printer.print(response);
+    const str = printer.print(response);
 
-    expect(cli.getLastOutput()).toBe('abc' + colors.red('123') + 'ghi');
+    expect(str).toBe('abc' + colors.red('123') + 'ghi');
   });
 });
 

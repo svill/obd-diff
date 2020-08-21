@@ -9,7 +9,7 @@ module.exports = class ResponsePrinter {
   print(response) {
     const styledText = response.reduce((acc, part) => 
       acc + (part.diff ? this.addStyledText(part.value) : part.value), "");
-    this._cli.output(styledText)
+    return styledText
   }
 
   addStyledText(text) {
