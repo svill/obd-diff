@@ -1,4 +1,4 @@
-const Response = require('./response');
+const Response = require('../response');
 
 describe('Response', () => {
   const SINGLE_FRAME_RESPONSE = 'pid1,frame1';

@@ -1,5 +1,5 @@
-const ResponseState = require('./responseState');
-const Response = require('./model/response');
+const ResponseState = require('../responseState');
+const Response = require('../model/response');
 
 describe('ResponseState', () => {
   test('should contain empty state when not given any response', () => {

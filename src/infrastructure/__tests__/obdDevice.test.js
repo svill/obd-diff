@@ -1,4 +1,4 @@
-const ObdDevice = require('./obdDevice')
+const ObdDevice = require('../obdDevice')
 
 describe('ObdDevice', () => {
   describe('connect', () => {

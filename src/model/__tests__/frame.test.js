@@ -1,4 +1,4 @@
-const Frame = require('./frame');
+const Frame = require('../frame');
 
 describe('Frame', () => {
   const FRAME1 = '7E807610224334D35CE';

@@ -1,7 +1,7 @@
-const CommandLine = require('./infrastructure/commandLine');
-const ResponsePrinter = require('./responsePrinter');
-const ResponseState = require('./responseState');
-const Response = require('./model/response');
+const CommandLine = require('../infrastructure/commandLine');
+const ResponsePrinter = require('../responsePrinter');
+const ResponseState = require('../responseState');
+const Response = require('../model/response');
 const colors = require('colors');
 
 describe('print', () => {  

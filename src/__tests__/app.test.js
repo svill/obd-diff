@@ -1,7 +1,7 @@
-const ObdDevice = require('./infrastructure/obdDevice')
-const CommandLine = require('./infrastructure/commandLine');
+const ObdDevice = require('../infrastructure/obdDevice')
+const CommandLine = require('../infrastructure/commandLine');
 const colors = require('colors');
-const App = require('./app');
+const App = require('../app');
 
 describe('Application', () => {
   test('should send AT config once connected', () => {

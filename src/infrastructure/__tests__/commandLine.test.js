@@ -1,6 +1,6 @@
 "use strict"
 
-const CommandLine = require('./commandLine');
+const CommandLine = require('../commandLine');
 
 describe('output', () => {
   test('remembers last console out', () => {
