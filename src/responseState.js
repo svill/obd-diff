@@ -18,16 +18,16 @@ module.exports = class ResponseState {
   }
 
   _isResponseEqual(response, previous) {
-     return response.compare(previous).length == 1
+    return response.equals(previous)
   }
 
   _insertHistory(response, histories) {
-    histories.unshift(...response.getFrames());
+    histories.unshift(response);
     this.state.set(response.getId(), histories)
   }
 
   _setHistory(response) {
-    this.state.set(response.getId(), response.getFrames())
+    this.state.set(response.getId(), [response])
   }
 
   getState() {

@@ -8,9 +8,9 @@ describe('ResponseState', () => {
   });
 
   describe('update', () => {
-    const RESPONSE1 = '2102,7E807610224334D35CE';
-    const RESPONSE1_MODIFIED = '2102,7E807610224334D00FF';    
-    const RESPONSE2 = '0140,7E906414000C800C8'
+    const RESPONSE1 = 'pid1,frame1';
+    const RESPONSE1_MODIFIED = 'pid1,frame1mod';    
+    const RESPONSE2 = 'pid2,frame21'
  
     test('should add multiple responses', () => {
       const responseState = new ResponseState();
@@ -22,8 +22,8 @@ describe('ResponseState', () => {
 
       expect(responseState.getState().size).toBe(2);
       expect(responseState.getState()).toEqual(new Map([
-        [response1.getId(), response1.getFrames()],
-        [response2.getId(), response2.getFrames()],
+        [response1.getId(), [response1]],
+        [response2.getId(), [response2]],
       ]));
     });
   
@@ -36,7 +36,7 @@ describe('ResponseState', () => {
 
       expect(responseState.getState().size).toBe(1);
       expect(responseState.getState()).toEqual(new Map([
-        [response1.getId(), response1.getFrames()],
+        [response1.getId(), [response1]],
       ]));
     });
 
@@ -50,7 +50,7 @@ describe('ResponseState', () => {
 
       expect(responseState.getState().size).toBe(1);
       expect(responseState.getState()).toEqual(new Map([
-        ['2102', ['7E807610224334D00FF', '7E807610224334D35CE']],
+        [response1.getId(), [response1Modified, response1]],
       ]));      
     });
   });
