@@ -1,9 +1,9 @@
 const Response = require('./response');
 
-describe('Response', () => {
-  const SINGLE_FRAME_RESPONSE = '2102,7E807610222374B38C9';
-  const SINGLE_FRAME_RESPONSE_WITH_EMPTY = '2102,7E807610222374B38C9,,';
-  const MULTI_FRAME_RESPONSE = '21E4,7E8100861E431000204,7E82164000000000000';
+describe.only('Response', () => {
+  const SINGLE_FRAME_RESPONSE = 'pid1,frame1';
+  const SINGLE_FRAME_RESPONSE_WITH_EMPTY = 'pid1,frame1,,';
+  const MULTI_FRAME_RESPONSE = 'pid2,frame1,frame2';
 
   test('should return value of response', () => {
     expect(Response(SINGLE_FRAME_RESPONSE).value).toBe(SINGLE_FRAME_RESPONSE);
@@ -15,11 +15,11 @@ describe('Response', () => {
     })
 
     test('should get Id as first frame', () => {
-      expect(Response(SINGLE_FRAME_RESPONSE).getId()).toBe('2102');
+      expect(Response(SINGLE_FRAME_RESPONSE).getId()).toBe('pid1');
     })
 
     test('should get Id as first frame', () => {
-      expect(Response(MULTI_FRAME_RESPONSE).getId()).toBe('21E4');
+      expect(Response(MULTI_FRAME_RESPONSE).getId()).toBe('pid2');
     })
   });
 
@@ -47,17 +47,17 @@ describe('Response', () => {
     })
 
     test('should return frames without the first ECHO frame', () => {
-      expect(Response(SINGLE_FRAME_RESPONSE).getFrames()).toEqual(['7E807610222374B38C9']);
+      expect(Response(SINGLE_FRAME_RESPONSE).getFrames()).toEqual(['frame1']);
     })
   
     test('should return frames without empty ones', () => {
       expect(Response(SINGLE_FRAME_RESPONSE_WITH_EMPTY).getFrames()).toEqual(
-        ['7E807610222374B38C9']);
+        ['frame1']);
     })
 
     test('should return consecutive frames when give a multiline reponse', () => {
       expect(Response(MULTI_FRAME_RESPONSE).getFrames()).toEqual(
-        ['7E8100861E431000204', '7E82164000000000000']);
+        ['frame1', 'frame2']);
     })
   });
 
