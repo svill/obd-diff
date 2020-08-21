@@ -35,15 +35,14 @@ describe('print', () => {
 
 describe('printTable', () => {
   test('should print table of responses when no differences', () => {
-    const cli = CommandLine.createNull();
-    const printer = new ResponsePrinter(cli);
+    const printer = new ResponsePrinter();
     const responseState = new ResponseState();
     responseState.update(Response('0105,ABCDEF'))
     responseState.update(Response('0106,123456'))
 
-    printer.printTable(responseState);
+    const table = printer.printTable(responseState);
 
-    expect(cli.getLastOutput()).toBe(
+    expect(table).toBe(
       '0105 | ABCDEF\n' +
       '0106 | 123456\n'
     );
