@@ -20,7 +20,7 @@ module.exports = class ResponsePrinter {
     const map = responseState.getState();
     let str = ''
     map.forEach(function(value, key) {
-      str += key + " | " + value + "\n";
+      str += key + " | " + value[0].getFrames() + "\n";
     })
     this._cli.output(str);
   }

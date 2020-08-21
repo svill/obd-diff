@@ -1,6 +1,6 @@
 const Response = require('./response');
 
-describe.only('Response', () => {
+describe('Response', () => {
   const SINGLE_FRAME_RESPONSE = 'pid1,frame1';
   const SINGLE_FRAME_RESPONSE_WITH_EMPTY = 'pid1,frame1,,';
   const MULTI_FRAME_RESPONSE = 'pid2,frame1,frame2';

@@ -37,7 +37,7 @@ describe('print', () => {
 });
 
 describe('printTable', () => {
-  test('should print table of responses', () => {
+  test('should print table of responses when no differences', () => {
     const cli = CommandLine.createNull();
     const printer = new ResponsePrinter(cli);
     const responseState = new ResponseState();
