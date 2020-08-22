@@ -19,7 +19,7 @@ describe('Application', () => {
     const app = new App(cli, obd);
     app.run();
 
-    obd.simulateResponseReceived('7E8 07 6113 02 14 B9 02 03')
+    obd.simulateResponseReceived('2113,7E8 07 6113 02 14 B9 02 03')
 
     expect(cli.getLastOutput()).toBe('7E8 07 6113 02 14 B9 02 03');
   });
