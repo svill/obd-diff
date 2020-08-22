@@ -1,13 +1,13 @@
 const colors = require('colors');
+const COL_DIVIDER = ' | '
 
 module.exports = class ResponsePrinter {
   printTable(responseState) {
     const map = responseState.getState();
     let table = ''
-    const _this = this;
-    // TODO: reduce() over Map()
+    const self = this;   
     map.forEach(function(histories, key) {
-      table += key + " | " + _this.printRow(histories) + "\n";
+      table += key + COL_DIVIDER + self.printRow(histories) + "\n";
     })
     return table;
   }

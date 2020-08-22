@@ -3,6 +3,8 @@ module.exports = class ResponseState {
     this.state = new Map();
   }
 
+  maxHistories = 10;
+
   update(response) {
     const id = response.getId();
     if (this.state.has(id)) {
@@ -19,6 +21,9 @@ module.exports = class ResponseState {
   
   _insertHistory(response, histories) {
     histories.unshift(response);
+    if (histories.length > this.maxHistories) {
+      histories.pop()
+    }
     this.state.set(response.getId(), histories)
   }
 

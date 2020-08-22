@@ -53,5 +53,20 @@ describe('ResponseState', () => {
         [response1.getId(), [response1Modified, response1]],
       ]));      
     });
+
+    test('should drop oldest history when max histories exceeded', () => {
+      const responseState = new ResponseState();
+      var responsesArr = []
+      for (i = 0; i < responseState.maxHistories + 1; i++) {
+        const response = Response('pid1,frame' + i)
+        responseState.update(response);
+        responsesArr.push(response);
+      }
+      responsesArr.reverse();
+      responsesArr.pop()
+
+      expect(responseState.getState().get('pid1').length).toBe(responseState.maxHistories);
+      expect(responseState.getState().get('pid1')).toEqual(responsesArr);
+    });
   });
 })

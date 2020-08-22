@@ -4,7 +4,7 @@ const Response = require('../model/response');
 const colors = require('colors');
 
 describe('printTable', () => {
-  test('should print table of responses when no differences', () => {
+  test('should print table with plain text when there are no differences', () => {
     const printer = new ResponsePrinter();
     const responseState = new ResponseState();
     responseState.update(Response('pid1,frame11'))
@@ -19,7 +19,7 @@ describe('printTable', () => {
   });
 
 
-  test('should print table of responses with differences', () => {
+  test('should print table with differences styled', () => {
     const printer = new ResponsePrinter();
     const responseState = new ResponseState();
     responseState.update(Response('pid1,frame11'))
@@ -46,7 +46,7 @@ describe('print', () => {
     expect(str).toBe('');
   });
 
-  test('should print only response as is', () => {
+  test('should print standalone response as is', () => {
     const printer = new ResponsePrinter();
     const responses = [Response('pid1,frame1')]
 
