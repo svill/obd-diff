@@ -20,11 +20,9 @@ describe('printTable', () => {
 });
 
 describe('print', () => {  
-
-  // TODO: response print should take in array of Response
-  test('should not print anything when there is nothing to print', () => {
+  test('should not print anything when the response is empty', () => {
     const printer = new ResponsePrinter();
-    const responses = [Response(''), Response('')]
+    const responses = [Response('')]
 
     const str = printer.printRow(responses);
 
@@ -52,6 +50,15 @@ describe('print', () => {
   test('should print styling when there are differences', () => {
     const printer = new ResponsePrinter();
     const responses = [Response('pid,abcdefghi'), Response('pid,abc123ghi')]
+
+    const str = printer.printRow(responses);
+
+    expect(str).toBe('abc' + colors.red('123') + 'ghi');
+  });
+
+  test('should only print differences between most recent two responses', () => {
+    const printer = new ResponsePrinter();
+    const responses = [Response('pid,abcdefghi'), Response('pid,abc123ghi'), Response('pid,abcXYZghi')]
 
     const str = printer.printRow(responses);
 

@@ -11,25 +11,22 @@ module.exports = class ResponsePrinter {
   }
 
   printRow(responses) {
-    const primary = responses[0];
-    const secondary = responses[1];
-
-    if (secondary) {
-      const diff = primary.compare(secondary);
-      const styledText = this.print(diff)
-      return styledText
+    const mostRecent = responses[0];
+    if (responses.length > 1) {
+      const previous = responses[1];
+      const diff = mostRecent.compare(previous);
+      return this._styleDiff(diff)
     }
-    return primary.getFrames().join();
+    return mostRecent.getFrames().join();
   }
 
-  print(diff) {
+  _styleDiff(diff) {
     const styledText = diff.reduce((acc, part) => 
-      acc + (part.diff ? this.addStyledText(part.value) : part.value), "");
+      acc + (part.diff ? this._styleText(part.value) : part.value), "");
     return styledText
   }
 
-  addStyledText(text) {
+  _styleText(text) {
     return colors.red(text)
   }
-
 };
