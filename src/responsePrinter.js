@@ -4,17 +4,20 @@ module.exports = class ResponsePrinter {
   printTable(responseState) {
     const map = responseState.getState();
     let table = ''
-    map.forEach(function(value, key) {
-      table += key + " | " + value[0].getFrames() + "\n";
+    const _this = this;
+    // TODO: reduce() over Map()
+    map.forEach(function(histories, key) {
+      table += key + " | " + _this.printRow(histories) + "\n";
     })
     return table;
   }
 
-  printRow(responses) {
-    const mostRecent = responses[0];
-    if (responses.length > 1) {
-      const previous = responses[1];
-      const diff = mostRecent.compare(previous);
+  printRow(histories) {
+    const mostRecent = histories[0];
+    
+    if (histories.length > 1) {
+      const previous = histories[1];
+      const diff = previous.compare(mostRecent);
       return this._styleDiff(diff)
     }
     return mostRecent.getFrames().join();
@@ -27,6 +30,6 @@ module.exports = class ResponsePrinter {
   }
 
   _styleText(text) {
-    return colors.red(text)
+    return colors.blue(text)
   }
 };
