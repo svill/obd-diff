@@ -10,8 +10,8 @@ describe('Application', () => {
     app.run();
 
     expect(obd.isConnected()).toBe(true);
-    expect(obd.getLastWrite()).toContain("ATH1");
-    expect(obd.getLastWrite()).toContain('ATE1')
+    expect(obd.getWriteHistories()).toContain("ATH1");
+    expect(obd.getWriteHistories()).toContain('ATE1')
   });
 
   test('should print obd data response to console', () => {

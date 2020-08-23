@@ -6,6 +6,8 @@ const OBD_READER_EVENT_CONNECTED = 'connected';
 const OBD_READER_EVENT_RESPONSE_RECEIVED = 'responseReceived';
 
 module.exports = class ObdDevice extends EventEmitter {
+  MAX_WRITE_HISTORIES = 5  
+
   static createNull(address, channel) {
     return new ObdDevice(new NullObdDevice(), new NullProcess(address, channel));
   }
@@ -16,7 +18,7 @@ module.exports = class ObdDevice extends EventEmitter {
 
   constructor(obd, process) {
     super();
-    this._lastWrite = []
+    this._writeHistories = []
     this._obd = obd;
     this._process = process;
     this._listenForObdConnect();
@@ -49,20 +51,25 @@ module.exports = class ObdDevice extends EventEmitter {
 
   isConnected() { return this._obd.connected; }
   getAddress() { return this._obd.address; }
-  geChannel() { return this._obd.channel }
+  getChannel() { return this._obd.channel }
 
-  maxHistories = 5
+  getWriteHistories() { return this._writeHistories; }
 
   write(message) {
     this._obd.write(message);
-    this._lastWrite.unshift(message);
-    
-    if (this._lastWrite.length > this.maxHistories) {
-      this._lastWrite.pop()
-    }
+    this._storeWriteHistory(message);
   }
 
-  getLastWrite() { return this._lastWrite; }
+  _storeWriteHistory(message) {
+    this._writeHistories.unshift(message);
+    this._removeExcessWriteHistories();
+  }
+
+  _removeExcessWriteHistories() {
+    if (this._writeHistories.length > this.MAX_WRITE_HISTORIES) {
+      this._writeHistories.pop()
+    }
+  }
 };
 
 class NullObdDevice extends EventEmitter {
