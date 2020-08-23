@@ -1,34 +1,33 @@
 module.exports = class ResponseState {
+  MAX_RESPONSE_HISTORY = 10;
+
   constructor() {
     this.state = new Map();
   }
 
-  maxHistories = 10;
-
   update(response) {
     const id = response.getId();
-    if (this.state.has(id)) {
-      const histories = this.state.get(id);
+    const history = this.state.has(id) ? this.state.get(id) : this._initHistory(response)
 
-      const previous = histories[0];
-      if (!response.equals(previous)) {
-        this._insertHistory(response, histories); 
-      }
-    } else {
-      this._setHistory(response);
+    const previous = history[0];
+    if (previous && !response.equals(previous)) {
+      this._addHistory(response, history);
     }
+  }
+
+  _initHistory(response) {
+    return this.state.set(response.getId(), [response])
   }
   
-  _insertHistory(response, histories) {
-    histories.unshift(response);
-    if (histories.length > this.maxHistories) {
-      histories.pop()
-    }
-    this.state.set(response.getId(), histories)
+  _addHistory(response, history) {
+    history.unshift(response);
+    this._removeExcessHistories(history);
   }
 
-  _setHistory(response) {
-    this.state.set(response.getId(), [response])
+  _removeExcessHistories(history) {
+    if (history.length > this.MAX_RESPONSE_HISTORY) {
+      history.pop()
+    }
   }
 
   getState() {

@@ -39,7 +39,7 @@ describe('ObdDevice', () => {
 
       obd.write('my_message');
       
-      expect(obd.getWriteHistories()).toContain('my_message');
+      expect(obd.getWriteHistory()).toContain('my_message');
     });
 
     test('should store history of last 5 writes only', () =>{
@@ -48,7 +48,7 @@ describe('ObdDevice', () => {
       const expectedHistory = [ 'ATX6', 'ATX5', 'ATX4', 'ATX3', 'ATX2' ]
       writes.map(x => { obd.write(x) })
 
-      expect(obd.getWriteHistories()).toEqual(expectedHistory)
+      expect(obd.getWriteHistory()).toEqual(expectedHistory)
     });
   });
 });

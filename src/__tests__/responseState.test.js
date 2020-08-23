@@ -57,7 +57,7 @@ describe('ResponseState', () => {
     test('should drop oldest history when max histories exceeded', () => {
       const responseState = new ResponseState();
       var responsesArr = []
-      for (i = 0; i < responseState.maxHistories + 1; i++) {
+      for (i = 0; i < responseState.MAX_RESPONSE_HISTORY + 1; i++) {
         responsesArr.push(Response('pid1,frame' + i));
       }
 
@@ -65,7 +65,7 @@ describe('ResponseState', () => {
 
       responsesArr.reverse();
       responsesArr.pop()
-      expect(responseState.getState().get('pid1').length).toBe(responseState.maxHistories);
+      expect(responseState.getState().get('pid1').length).toBe(responseState.MAX_RESPONSE_HISTORY);
       expect(responseState.getState().get('pid1')).toEqual(responsesArr);
     });
   });
