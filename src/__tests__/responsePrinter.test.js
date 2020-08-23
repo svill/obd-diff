@@ -73,7 +73,7 @@ describe('print', () => {
     expect(str).toBe('abc' + colors.blue('123') + 'ghi');
   });
 
-  test('should only print differences between most recent two responses', () => {
+  test('should only print differences between two most recent responses', () => {
     const printer = new ResponsePrinter();
     const responses = [Response('pid,abc123ghi'), Response('pid,abcdefghi'), Response('pid,abcXYZghi')]
 

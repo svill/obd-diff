@@ -5,10 +5,6 @@ describe('Response', () => {
   const SINGLE_FRAME_RESPONSE_WITH_EMPTY = 'pid1,frame1,,';
   const MULTI_FRAME_RESPONSE = 'pid2,frame1,frame2';
 
-  test('should return value of response', () => {
-    expect(Response(SINGLE_FRAME_RESPONSE).value).toBe(SINGLE_FRAME_RESPONSE);
-  })
-
   describe('getId', () => {
     test('should empty Id when response is empty', () => {
       expect(Response('').getId()).toBe('');
@@ -23,21 +19,17 @@ describe('Response', () => {
     })
   });
 
-  describe('count', () => {
-    test('should return 0 when given empty', () => {
-      expect(Response('').count()).toBe(0);
+  describe('toString', () => {
+    test('should return empty when given empty response', () => {
+      expect(Response('').toString()).toEqual('');
     })
 
-    test('should count frames excluding the first', () => {
-      expect(Response(SINGLE_FRAME_RESPONSE).count()).toBe(1);
+    test('should return response when given response', () => {
+      expect(Response(SINGLE_FRAME_RESPONSE).toString()).toEqual(SINGLE_FRAME_RESPONSE);
     })
-  
-    test('should count frames excluding empty ones', () => {
-      expect(Response(SINGLE_FRAME_RESPONSE_WITH_EMPTY).count()).toBe(1);
-    })  
 
-    test('should count frames excluding empty ones', () => {
-      expect(Response(MULTI_FRAME_RESPONSE).count()).toBe(2);
+    test('should return response when given multi-frame response', () => {
+      expect(Response(MULTI_FRAME_RESPONSE).toString()).toEqual(MULTI_FRAME_RESPONSE);
     })
   });
 
@@ -58,6 +50,24 @@ describe('Response', () => {
     test('should return consecutive frames when give a multiline reponse', () => {
       expect(Response(MULTI_FRAME_RESPONSE).getFrames()).toEqual(
         ['frame1', 'frame2']);
+    })
+  });
+
+  describe('value', () => {
+    test('should return empty when given empty response', () => {
+      expect(Response('').value).toBe('');
+    })
+
+    test('should return frames without the first ECHO frame', () => {
+      expect(Response(SINGLE_FRAME_RESPONSE).value).toBe('frame1');
+    })
+  
+    test('should return frames without empty ones', () => {
+      expect(Response(SINGLE_FRAME_RESPONSE_WITH_EMPTY).value).toBe('frame1');
+    })
+
+    test('should return consecutive frames when give a multiline reponse', () => {
+      expect(Response(MULTI_FRAME_RESPONSE).value).toBe('frame1,frame2');
     })
   });
 

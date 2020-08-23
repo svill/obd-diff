@@ -1,7 +1,7 @@
 const jsdiff = require('diff');
 
-const Response = (response) => {
-  const filteredFrames = response.split(',').filter(x => x.length)
+const Response = (responseString) => {
+  const filteredFrames = responseString.split(',').filter(x => x.length)
 
   const getId = () => {
     return filteredFrames.length ? filteredFrames[0] : '';
@@ -11,13 +11,16 @@ const Response = (response) => {
     return filteredFrames.slice(1)
   }
 
-  const count = () => {
-    return getFrames().length;
+  const equals = (response2) => {
+    return responseString.toString() == response2.toString()
+  }
+
+  const toString = () => {
+    return responseString;
   }
 
   const compare = (response2) => {
-    const val = response2.getFrames().join()
-    const diff = jsdiff.diffChars(response, val);
+    const diff = jsdiff.diffChars(responseString, response2.value);
     return diff.filter(x => !!x.removed == false)
       .map(part => { return { 
           'value': part.value,
@@ -26,17 +29,13 @@ const Response = (response) => {
       });
   }
 
-  const equals = (response2) => {
-    return response == response2.value
-  }
-
   return {
     getId,
-    getFrames,
-    count,
     compare,
+    getFrames,
     equals,
-    value: response,
+    toString,
+    value: getFrames().join(),
   }
 }
 

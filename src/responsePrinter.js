@@ -20,13 +20,12 @@ module.exports = class ResponsePrinter {
       const diff = previous.compare(mostRecent);
       return this._styleDiff(diff)
     }
-    return mostRecent.getFrames().join();
+    return mostRecent.value;
   }
 
   _styleDiff(diff) {
-    const styledText = diff.reduce((acc, part) => 
-      acc + (part.diff ? this._styleText(part.value) : part.value), "");
-    return styledText
+    return diff.reduce((accumulator, part) => 
+      accumulator + (part.diff ? this._styleText(part.value) : part.value), '');
   }
 
   _styleText(text) {

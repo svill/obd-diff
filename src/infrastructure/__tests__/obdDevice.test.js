@@ -46,6 +46,7 @@ describe('ObdDevice', () => {
       const obd = ObdDevice.createNull()
       const writes = [ 'ATX1', 'ATX2', 'ATX3', 'ATX4', 'ATX5', 'ATX6' ]
       const expectedHistory = [ 'ATX6', 'ATX5', 'ATX4', 'ATX3', 'ATX2' ]
+      
       writes.map(x => { obd.write(x) })
 
       expect(obd.getWriteHistory()).toEqual(expectedHistory)
