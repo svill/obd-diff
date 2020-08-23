@@ -1,15 +1,11 @@
+require('./extension/mapExtensions');
 const colors = require('colors');
-const COL_DIVIDER = ' | '
+const COL_DIVIDER = '|'
 
 module.exports = class ResponsePrinter {
   printTable(responseState) {
-    const map = responseState.getState();
-    let table = ''
-    const self = this;   
-    map.forEach(function(histories, key) {
-      table += key + COL_DIVIDER + self.printRow(histories) + "\n";
-    })
-    return table;
+    return responseState.getState().reduce((acc, [key, values]) =>
+      acc + `${key} ${COL_DIVIDER} ${this.printRow(values)}\n`)
   }
 
   printRow(histories) {
