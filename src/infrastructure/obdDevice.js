@@ -16,6 +16,7 @@ module.exports = class ObdDevice extends EventEmitter {
 
   constructor(obd, process) {
     super();
+    this._lastWrite = []
     this._obd = obd;
     this._process = process;
     this._listenForObdConnect();
@@ -50,9 +51,15 @@ module.exports = class ObdDevice extends EventEmitter {
   getAddress() { return this._obd.address; }
   geChannel() { return this._obd.channel }
 
+  maxHistories = 5
+
   write(message) {
     this._obd.write(message);
-    this._lastWrite = message;
+    this._lastWrite.unshift(message);
+    
+    if (this._lastWrite.length > this.maxHistories) {
+      this._lastWrite.pop()
+    }
   }
 
   getLastWrite() { return this._lastWrite; }

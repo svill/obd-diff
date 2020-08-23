@@ -39,7 +39,16 @@ describe('ObdDevice', () => {
 
       obd.write('my_message');
       
-      expect(obd.getLastWrite()).toBe('my_message');
+      expect(obd.getLastWrite()).toContain('my_message');
+    });
+
+    test('should store history of last 5 writes only', () =>{
+      const obd = ObdDevice.createNull()
+      const writes = [ 'ATX1', 'ATX2', 'ATX3', 'ATX4', 'ATX5', 'ATX6' ]
+      const expectedHistory = [ 'ATX6', 'ATX5', 'ATX4', 'ATX3', 'ATX2' ]
+      writes.map(x => { obd.write(x) })
+
+      expect(obd.getLastWrite()).toEqual(expectedHistory)
     });
   });
 });
