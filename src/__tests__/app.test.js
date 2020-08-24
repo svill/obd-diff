@@ -22,9 +22,14 @@ describe('Application', () => {
     const app = new App(cli, obd);
     app.run();
 
-    obd.simulateResponseReceived('2113,7E8 07 6113 02 14 B9 02 03')
+    obd.simulateResponseReceived('pid1,AABBCCDDEEFF00112233')
+    obd.simulateResponseReceived('pid1,AABBCCDD99FF00112233')
+    obd.simulateResponseReceived('pid2,00112233445566778899')
 
-    expect(cli.getLastOutput()).toBe('7E8 07 6113 02 14 B9 02 03');
+    expect(cli.getLastOutput()).toBe(
+      `pid1 | AABBCCDD${'99'.blue}FF00112233\n` +
+      `pid2 | 00112233445566778899\n`
+    );
   });
 
   function trackSentMessages(obd) {

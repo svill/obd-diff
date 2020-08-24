@@ -1,4 +1,5 @@
 require('events').EventEmitter;
+const ResponseState = require('./responseState');
 const ResponsePrinter = require('./responsePrinter');
 const Response = require('./model/response');
 
@@ -7,6 +8,7 @@ module.exports = class App {
     this.cli = cli;
     this.obd = obd;
     this.printer = new ResponsePrinter();
+    this.responseState = new ResponseState()
   }
 
   run() {
@@ -17,8 +19,9 @@ module.exports = class App {
     this.obd.connect();
 
     this.obd.on('myResponseReceived', (data) => {
-      const response = Response('2113,7E8 07 6113 02 14 B9 02 03');
-      const table = this.printer.printRow([response, Response(data)]);
+      const response = Response(data)
+      this.responseState.update(response)
+      const table = this.printer.printTable(this.responseState)
       this.cli.output(table)
     });
   }
