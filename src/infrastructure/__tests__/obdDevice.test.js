@@ -36,20 +36,29 @@ describe('ObdDevice', () => {
   describe('write', () => {
     test('should write to OBD device', () => {
       const obd = ObdDevice.createNull();
+      const sentMessages = trackSentMessages(obd)
 
       obd.write('my_message');
       
-      expect(obd.getWriteHistory()).toContain('my_message');
+      expect(sentMessages).toContain('my_message');
     });
 
-    test('should store history of last 5 writes only', () =>{
+    test('should trigger event when message is written', () => {
       const obd = ObdDevice.createNull()
-      const writes = [ 'ATX1', 'ATX2', 'ATX3', 'ATX4', 'ATX5', 'ATX6' ]
-      const expectedHistory = [ 'ATX6', 'ATX5', 'ATX4', 'ATX3', 'ATX2' ]
-      
+      const writes = [ 'ATX1', 'ATX2', 'ATX3', 'ATX4', 'ATX5' ]
+      const sentMessages = trackSentMessages(obd)
+
       writes.map(x => { obd.write(x) })
 
-      expect(obd.getWriteHistory()).toEqual(expectedHistory)
+      expect(sentMessages).toEqual(writes)
     });
+
+    function trackSentMessages(obd) {
+      const sentMessages = []
+      obd.on('myWriteMessage', (message) => {
+        sentMessages.push(message)
+      })
+      return sentMessages;
+    }
   });
 });

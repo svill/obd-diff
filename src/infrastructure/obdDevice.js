@@ -57,19 +57,8 @@ module.exports = class ObdDevice extends EventEmitter {
 
   write(message) {
     this._obd.write(message);
-    this._storeWriteHistory(message);
-  }
-
-  _storeWriteHistory(message) {
-    this._writeHistory.unshift(message);
-    this._removeExcessWriteHistory();
-  }
-
-  _removeExcessWriteHistory() {
-    if (this._writeHistory.length > this.MAX_WRITE_HISTORY) {
-      this._writeHistory.pop()
-    }
-  }
+    this.emit('myWriteMessage', message);
+  } 
 };
 
 class NullObdDevice extends EventEmitter {

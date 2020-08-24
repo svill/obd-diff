@@ -1,4 +1,4 @@
-var EventEmitter = require('events').EventEmitter;
+require('events').EventEmitter;
 const ResponsePrinter = require('./responsePrinter');
 const Response = require('./model/response');
 

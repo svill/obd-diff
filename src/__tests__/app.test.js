@@ -7,11 +7,13 @@ describe('Application', () => {
   test('should send AT config once connected', () => {
     const obd = ObdDevice.createNull('my_address', 10);
     const app = new App(null, obd);
+    const sentMessages = trackSentMessages(obd) 
+
     app.run();
 
     expect(obd.isConnected()).toBe(true);
-    expect(obd.getWriteHistory()).toContain("ATH1");
-    expect(obd.getWriteHistory()).toContain('ATE1')
+    expect(sentMessages).toContain("ATH1");
+    expect(sentMessages).toContain('ATE1')
   });
 
   test('should print obd data response to console', () => {
@@ -24,4 +26,12 @@ describe('Application', () => {
 
     expect(cli.getLastOutput()).toBe('7E8 07 6113 02 14 B9 02 03');
   });
+
+  function trackSentMessages(obd) {
+    const sentMessages = []
+    obd.on('myWriteMessage', (message) => {
+      sentMessages.push(message)
+    })
+    return sentMessages;
+  }
 });
