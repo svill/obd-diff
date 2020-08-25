@@ -1,13 +1,16 @@
-const OBDReader = require('../../lib/obd.js');
-var EventEmitter = require('events').EventEmitter;
 var config = require('dotenv').config();
+var EventEmitter = require('events').EventEmitter;
+const OBDReader = require('../../lib/obd.js');
+const OBDReaderEvent = {
+  CONNECTED: 'connected',
+  RESPONSE_RECEIVED: 'responseReceived',
+}
 
-const OBD_READER_EVENT_CONNECTED = 'connected';
-const OBD_READER_EVENT_RESPONSE_RECEIVED = 'responseReceived';
-
-const OBD_DEVICE_CONNECTED = 'myConnected'
-const OBD_DEVICE_RESPONSE_RECEIVED = 'myResponseReceived'
-const OBD_DEVICE_WRITE_MSG = 'myWriteMessage'
+const ObdDeviceEvent = {
+  CONNECTED: 'myConnected',
+  RESPONSE_RECEIVED: 'myResponseReceived',
+  WRITE_MSG: 'myWriteMessage',
+}
 
 class ObdDevice extends EventEmitter {
 
@@ -21,7 +24,6 @@ class ObdDevice extends EventEmitter {
 
   constructor(obd, process) {
     super();
-    this._writeHistory = []
     this._obd = obd;
     this._process = process;
     this._listenForObdConnect();
@@ -29,13 +31,13 @@ class ObdDevice extends EventEmitter {
   }
 
   _listenForObdConnect() {
-    this._obd.on(OBD_READER_EVENT_CONNECTED, () => {
-      this.emit(OBD_DEVICE_CONNECTED);
+    this._obd.on(OBDReaderEvent.CONNECTED, () => {
+      this.emit(ObdDeviceEvent.CONNECTED);
     });
   }
 
   _listenForObdResponseReceived() {
-    this._obd.on(OBD_READER_EVENT_RESPONSE_RECEIVED, (data) => {
+    this._obd.on(OBDReaderEvent.RESPONSE_RECEIVED, (data) => {
       this._handleResponseReceived(data);
     });
   }
@@ -45,7 +47,7 @@ class ObdDevice extends EventEmitter {
   }
 
   _handleResponseReceived(data) {
-    this.emit(OBD_DEVICE_RESPONSE_RECEIVED, data);
+    this.emit(ObdDeviceEvent.RESPONSE_RECEIVED, data);
   } 
 
   connect() {
@@ -56,11 +58,9 @@ class ObdDevice extends EventEmitter {
   getAddress() { return this._obd.address; }
   getChannel() { return this._obd.channel }
 
-  getWriteHistory() { return this._writeHistory; }
-
   write(message) {
     this._obd.write(message);
-    this.emit(OBD_DEVICE_WRITE_MSG, message);
+    this.emit(ObdDeviceEvent.WRITE_MSG, message);
   } 
 };
 
@@ -69,7 +69,7 @@ class NullObdDevice extends EventEmitter {
     this.connected = true;
     this.address = address;
     this.channel = channel;
-    this.emit(OBD_READER_EVENT_CONNECTED);
+    this.emit(OBDReaderEvent.CONNECTED);
   }
 
   write(message) { }
@@ -85,8 +85,6 @@ class NullProcess {
 }
 
 module.exports = {
-  OBD_DEVICE_CONNECTED,
-  OBD_DEVICE_RESPONSE_RECEIVED,
-  OBD_DEVICE_WRITE_MSG,
-  ObdDevice
+  ObdDevice,
+  ObdDeviceEvent,
 }

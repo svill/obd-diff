@@ -1,4 +1,4 @@
-const { ObdDevice } = require('../infrastructure/obdDevice')
+const { ObdDevice, ObdDeviceEvent } = require('../infrastructure/obdDevice')
 const CommandLine = require('../infrastructure/commandLine');
 const colors = require('colors');
 const App = require('../app');
@@ -34,7 +34,7 @@ describe('Application', () => {
 
   function trackSentMessages(obd) {
     const sentMessages = []
-    obd.on('myWriteMessage', (message) => {
+    obd.on(ObdDeviceEvent.WRITE_MSG, (message) => {
       sentMessages.push(message)
     })
     return sentMessages;
