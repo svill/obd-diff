@@ -5,8 +5,11 @@ var config = require('dotenv').config();
 const OBD_READER_EVENT_CONNECTED = 'connected';
 const OBD_READER_EVENT_RESPONSE_RECEIVED = 'responseReceived';
 
-module.exports = class ObdDevice extends EventEmitter {
-  MAX_WRITE_HISTORY = 5  
+const OBD_DEVICE_CONNECTED = 'myConnected'
+const OBD_DEVICE_RESPONSE_RECEIVED = 'myResponseReceived'
+const OBD_DEVICE_WRITE_MSG = 'myWriteMessage'
+
+class ObdDevice extends EventEmitter {
 
   static createNull(address, channel) {
     return new ObdDevice(new NullObdDevice(), new NullProcess(address, channel));
@@ -27,7 +30,7 @@ module.exports = class ObdDevice extends EventEmitter {
 
   _listenForObdConnect() {
     this._obd.on(OBD_READER_EVENT_CONNECTED, () => {
-      this.emit('myConnected');
+      this.emit(OBD_DEVICE_CONNECTED);
     });
   }
 
@@ -42,7 +45,7 @@ module.exports = class ObdDevice extends EventEmitter {
   }
 
   _handleResponseReceived(data) {
-    this.emit('myResponseReceived', data);
+    this.emit(OBD_DEVICE_RESPONSE_RECEIVED, data);
   } 
 
   connect() {
@@ -57,7 +60,7 @@ module.exports = class ObdDevice extends EventEmitter {
 
   write(message) {
     this._obd.write(message);
-    this.emit('myWriteMessage', message);
+    this.emit(OBD_DEVICE_WRITE_MSG, message);
   } 
 };
 
@@ -79,4 +82,11 @@ class NullProcess {
       'OBD_CHANNEL': channel,
     };
   } 
+}
+
+module.exports = {
+  OBD_DEVICE_CONNECTED,
+  OBD_DEVICE_RESPONSE_RECEIVED,
+  OBD_DEVICE_WRITE_MSG,
+  ObdDevice
 }

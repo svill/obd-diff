@@ -1,5 +1,5 @@
 const ResponsePrinter = require('../responsePrinter');
-const ResponseState = require('../responseState');
+const { ResponseState } = require('../responseState');
 const Response = require('../model/response');
 const colors = require('colors');
 

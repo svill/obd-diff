@@ -1,6 +1,6 @@
-module.exports = class ResponseState {
-  MAX_RESPONSE_HISTORY = 10;
+const MAX_RESPONSE_HISTORY = 10;
 
+class ResponseState {
   constructor() {
     this.state = new Map();
   }
@@ -25,7 +25,7 @@ module.exports = class ResponseState {
   }
 
   _removeExcessHistories(history) {
-    if (history.length > this.MAX_RESPONSE_HISTORY) {
+    if (history.length > MAX_RESPONSE_HISTORY) {
       history.pop()
     }
   }
@@ -33,4 +33,9 @@ module.exports = class ResponseState {
   getState() {
     return this.state;
   }
-};
+}
+
+module.exports = {
+  MAX_RESPONSE_HISTORY,
+  ResponseState
+}

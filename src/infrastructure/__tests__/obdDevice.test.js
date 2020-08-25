@@ -1,10 +1,15 @@
-const ObdDevice = require('../obdDevice')
+const { 
+  ObdDevice,
+  OBD_DEVICE_CONNECTED, 
+  OBD_DEVICE_RESPONSE_RECEIVED,
+  OBD_DEVICE_WRITE_MSG,
+} = require('../obdDevice')
 
 describe('ObdDevice', () => {
   describe('connect', () => {
     test('should forward connected event when obd device connects', () => {
       const obd = ObdDevice.createNull();
-      obd.on('myConnected', () => { eventTriggered = true; });
+      obd.on(OBD_DEVICE_CONNECTED, () => { eventTriggered = true; });
 
       obd.connect();
       
@@ -25,7 +30,7 @@ describe('ObdDevice', () => {
   describe('responseReceived event', () => {
     test('should forward response received event when obd device receives data', () => {
       const obd = ObdDevice.createNull();
-      obd.on('myResponseReceived', (data) => { responseData = data; });
+      obd.on(OBD_DEVICE_RESPONSE_RECEIVED, (data) => { responseData = data; });
 
       obd.simulateResponseReceived('my_data');
       
@@ -55,7 +60,7 @@ describe('ObdDevice', () => {
 
     function trackSentMessages(obd) {
       const sentMessages = []
-      obd.on('myWriteMessage', (message) => {
+      obd.on(OBD_DEVICE_WRITE_MSG, (message) => {
         sentMessages.push(message)
       })
       return sentMessages;

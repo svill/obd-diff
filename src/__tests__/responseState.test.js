@@ -1,4 +1,4 @@
-const ResponseState = require('../responseState');
+const {ResponseState, MAX_RESPONSE_HISTORY} = require('../responseState');
 const Response = require('../model/response');
 
 describe('ResponseState', () => {
@@ -57,15 +57,15 @@ describe('ResponseState', () => {
     test('should drop oldest history when max histories exceeded', () => {
       const responseState = new ResponseState();
       var responsesArr = []
-      for (i = 0; i < responseState.MAX_RESPONSE_HISTORY + 1; i++) {
+      for (i = 0; i < MAX_RESPONSE_HISTORY + 1; i++) {
         responsesArr.push(Response('pid1,frame' + i));
       }
 
       responsesArr.map(x => responseState.update(x))
-
+      
       responsesArr.reverse();
       responsesArr.pop()
-      expect(responseState.getState().get('pid1').length).toBe(responseState.MAX_RESPONSE_HISTORY);
+      expect(responseState.getState().get('pid1').length).toBe(MAX_RESPONSE_HISTORY);
       expect(responseState.getState().get('pid1')).toEqual(responsesArr);
     });
   });

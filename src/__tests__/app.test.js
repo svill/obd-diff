@@ -1,4 +1,4 @@
-const ObdDevice = require('../infrastructure/obdDevice')
+const { ObdDevice } = require('../infrastructure/obdDevice')
 const CommandLine = require('../infrastructure/commandLine');
 const colors = require('colors');
 const App = require('../app');
