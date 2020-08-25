@@ -1,5 +1,5 @@
 var config = require('dotenv').config();
-var EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events');
 const OBDReader = require('../../lib/obd.js');
 const OBDReaderEvent = {
   CONNECTED: 'connected',

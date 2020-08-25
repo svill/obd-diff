@@ -1,11 +1,14 @@
-require('events').EventEmitter;
-const { ObdDeviceEvent, OBD_DEVICE_RESPONSE_RECEIVED } = require('./infrastructure/obdDevice');
+const { ObdDevice, ObdDeviceEvent } = require('./infrastructure/obdDevice');
 const { ResponseState } = require('./responseState');
 const ResponsePrinter = require('./responsePrinter');
 const Response = require('./model/response');
+const CommandLine = require('./infrastructure/commandLine');
 
 module.exports = class App {
-  constructor(cli, obd) {
+  constructor(
+      cli = CommandLine.create(), 
+      obd = ObdDevice.create()) 
+  {
     this.cli = cli;
     this.obd = obd;
     this.printer = new ResponsePrinter();

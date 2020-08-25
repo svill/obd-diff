@@ -2,9 +2,9 @@
   "name": "obd-diff",
   "version": "0.1.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/run.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/run.js",
     "test": "jest --watch"
   },
   "repository": {
