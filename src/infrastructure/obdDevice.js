@@ -10,7 +10,10 @@ const ObdDeviceEvent = {
   CONNECTED: 'myConnected',
   RESPONSE_RECEIVED: 'myResponseReceived',
   WRITE_MSG: 'myWriteMessage',
+  STARTED_POLLING: 'myStartedPolling'
 }
+
+const pollInterval = 1000
 
 class ObdDevice extends EventEmitter {
 
@@ -62,9 +65,25 @@ class ObdDevice extends EventEmitter {
     this._obd.write(message);
     this.emit(ObdDeviceEvent.WRITE_MSG, message);
   } 
+
+  pollPids(pids) {
+    pids.map(pid => this._obd.addPollerString(pid))
+  }
+
+  getActivePollers() { return this._obd.activePollers }
+
+  startPolling() {
+    this._obd.startPolling(pollInterval)
+    this.emit(ObdDeviceEvent.STARTED_POLLING);
+  }
 };
 
 class NullObdDevice extends EventEmitter {
+  constructor() {
+    super()
+    this.activePollers = []
+  }
+
   connect(address, channel) {
     this.connected = true;
     this.address = address;
@@ -73,6 +92,12 @@ class NullObdDevice extends EventEmitter {
   }
 
   write(message) { }
+
+  addPollerString(string) {
+    this.activePollers.push(string)
+  }
+
+  startPolling(interval) { }
 }
 
 class NullProcess {

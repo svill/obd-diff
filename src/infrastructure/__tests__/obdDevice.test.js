@@ -1,19 +1,18 @@
 const { 
   ObdDevice,
   ObdDeviceEvent, 
-  OBD_DEVICE_RESPONSE_RECEIVED,
-  OBD_DEVICE_WRITE_MSG,
 } = require('../obdDevice')
 
 describe('ObdDevice', () => {
   describe('connect', () => {
     test('should forward connected event when obd device connects', () => {
       const obd = ObdDevice.createNull();
-      obd.on(ObdDeviceEvent.CONNECTED, () => { eventTriggered = true; });
+      this.eventTriggered = false;
+      obd.on(ObdDeviceEvent.CONNECTED, () => { this.eventTriggered = true; });
 
       obd.connect();
       
-      expect(eventTriggered).toBe(true);
+      expect(this.eventTriggered).toBe(true);
     });
 
     test('should connect with env var address and channel', () => {
@@ -65,5 +64,28 @@ describe('ObdDevice', () => {
       })
       return sentMessages;
     }
+  });
+
+  describe('pollPids', () => {
+    test('should add PIDs to active pollers list', () => {
+      const obd = ObdDevice.createNull();
+      const pids = ['pid1', 'pid2']
+
+      obd.pollPids(pids);
+
+      expect(obd.getActivePollers()).toEqual(pids)
+    })
+  });
+
+  describe('startPolling', () => {
+    test('should emit startPolling event', () => {
+      const obd = ObdDevice.createNull();
+      this.eventTriggered = false;
+      obd.on(ObdDeviceEvent.STARTED_POLLING, () => { this.eventTriggered = true; });
+
+      obd.startPolling();
+
+      expect(this.eventTriggered).toBeTruthy();
+    })
   });
 });

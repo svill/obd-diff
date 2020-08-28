@@ -19,8 +19,12 @@ module.exports = class App {
     this.obd.on(ObdDeviceEvent.CONNECTED, () => {
       this.obd.write('ATH1');
       this.obd.write('ATE1')
+
+      const pids = ['pid1', 'pid2']
+      this.obd.pollPids(pids)
+
+      this.obd.startPolling()
     });
-    this.obd.connect();
 
     this.obd.on(ObdDeviceEvent.RESPONSE_RECEIVED, (data) => {
       const response = Response(data)
@@ -28,5 +32,7 @@ module.exports = class App {
       const table = this.printer.printTable(this.responseState)
       this.cli.output(table)
     });
+
+    this.obd.connect();
   }
 };
