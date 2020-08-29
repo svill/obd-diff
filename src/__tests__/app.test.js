@@ -51,9 +51,9 @@ describe('Application', () => {
     
     app.run();
 
-    obd.simulateResponseReceived('pid1,AABBCCDDEEFF00112233')
-    obd.simulateResponseReceived('pid1,AABBCCDD99FF00112233')
-    obd.simulateResponseReceived('pid2,00112233445566778899')
+    obd.simulateResponseReceived(['pid1','AABBCCDDEEFF00112233'])
+    obd.simulateResponseReceived(['pid1','AABBCCDD99FF00112233'])
+    obd.simulateResponseReceived(['pid2','00112233445566778899'])
     
     expect(cli.getLastOutput()).toBe(
       `pid1 | AABBCCDD${'99'.blue}FF00112233\n` +

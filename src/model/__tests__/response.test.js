@@ -1,13 +1,13 @@
 const Response = require('../response');
 
 describe('Response', () => {
-  const SINGLE_FRAME_RESPONSE = 'pid1,frame1';
-  const SINGLE_FRAME_RESPONSE_WITH_EMPTY = 'pid1,frame1,,';
-  const MULTI_FRAME_RESPONSE = 'pid2,frame1,frame2';
+  const SINGLE_FRAME_RESPONSE = ['pid1','frame1'];
+  const SINGLE_FRAME_RESPONSE_WITH_EMPTY = ['pid1','frame1',,];
+  const MULTI_FRAME_RESPONSE = ['pid2','frame1','frame2'];
 
   describe('getId', () => {
     test('should empty Id when response is empty', () => {
-      expect(Response('').getId()).toBe('');
+      expect(Response(['']).getId()).toBe('');
     })
 
     test('should get Id as first frame', () => {
@@ -21,21 +21,21 @@ describe('Response', () => {
 
   describe('toString', () => {
     test('should return empty when given empty response', () => {
-      expect(Response('').toString()).toEqual('');
+      expect(Response(['']).toString()).toEqual('');
     })
 
     test('should return response when given response', () => {
-      expect(Response(SINGLE_FRAME_RESPONSE).toString()).toEqual(SINGLE_FRAME_RESPONSE);
+      expect(Response(SINGLE_FRAME_RESPONSE).toString()).toEqual(SINGLE_FRAME_RESPONSE.join(','));
     })
 
     test('should return response when given multi-frame response', () => {
-      expect(Response(MULTI_FRAME_RESPONSE).toString()).toEqual(MULTI_FRAME_RESPONSE);
+      expect(Response(MULTI_FRAME_RESPONSE).toString()).toEqual(MULTI_FRAME_RESPONSE.join(','));
     })
   });
 
   describe('getFrames', () => {
     test('should return empty array when given empty response', () => {
-      expect(Response('').getFrames()).toEqual([]);
+      expect(Response(['']).getFrames()).toEqual([]);
     })
 
     test('should return frames without the first ECHO frame', () => {
@@ -55,7 +55,7 @@ describe('Response', () => {
 
   describe('value', () => {
     test('should return empty when given empty response', () => {
-      expect(Response('').value).toBe('');
+      expect(Response(['']).value).toBe('');
     })
 
     test('should return frames without the first ECHO frame', () => {
@@ -73,23 +73,23 @@ describe('Response', () => {
 
   describe('equals', () => {
     test('should be true when empty', () => {
-      expect(Response('').equals(Response(''))).toBeTruthy();
+      expect(Response(['']).equals(Response(['']))).toBeTruthy();
     })
 
     test('should be true when single frame response', () => {
-      expect(Response('pid,frame').equals(Response('pid,frame'))).toBeTruthy();
+      expect(Response(['pid','frame']).equals(Response(['pid','frame']))).toBeTruthy();
     })
 
     test('should be true when multiframe response', () => {
-      expect(Response('pid,frame1,frame2').equals(Response('pid,frame1,frame2'))).toBeTruthy();
+      expect(Response(['pid','frame1','frame2']).equals(Response(['pid','frame1','frame2']))).toBeTruthy();
     })
 
     test('should be false when frame is different response', () => {
-      expect(Response('pid,frame').equals(Response('pid,frameX'))).toBeFalsy();
+      expect(Response(['pid','frame']).equals(Response(['pid','frameX']))).toBeFalsy();
     })
 
     test('should be false when pid is different response', () => {
-      expect(Response('pidX,frame').equals(Response('pid,frame'))).toBeFalsy();
+      expect(Response(['pidX','frame']).equals(Response(['pid','frame']))).toBeFalsy();
     })
 
     // test('should be true when pid and frames are the same ignoring empty ones', () => {}
@@ -97,7 +97,7 @@ describe('Response', () => {
 
   describe('compare', () => {
     test('should return empty when comparing empty values', () => {
-      const emptyResponse = Response('')
+      const emptyResponse = Response([''])
       expect(emptyResponse.compare(emptyResponse))
         .toEqual([
           { value: '', diff: false }
@@ -105,7 +105,7 @@ describe('Response', () => {
     });
   
     test('should return single identical char', () => {
-      const response = Response('pid,f')
+      const response = Response(['pid','f'])
       expect(response.compare(response))
         .toEqual([
           { value: 'f', diff: false }
@@ -113,7 +113,7 @@ describe('Response', () => {
     });
   
     test('should return single identical string', () => {
-      const response = Response('pid,frame')
+      const response = Response(['pid','frame'])
       expect(response.compare(response))
         .toEqual([
           { value: 'frame', diff: false } 
@@ -121,8 +121,8 @@ describe('Response', () => {
     });
   
     test('should return with differing char', () => {
-      const response1 = Response('pid,frame')
-      const response2 = Response('pid,frXme')
+      const response1 = Response(['pid','frame'])
+      const response2 = Response(['pid','frXme'])
       expect(response1.compare(response2))
         .toEqual([
           { value: 'fr', diff: false },
@@ -132,8 +132,8 @@ describe('Response', () => {
     });
 
     test('should return with differing portions', () => {
-      const response1 = Response('pid,frame0frame0frame0frame0')
-      const response2 = Response('pid,framAAframBBframe0frame0')
+      const response1 = Response(['pid','frame0frame0frame0frame0'])
+      const response2 = Response(['pid','framAAframBBframe0frame0'])
       expect(response1.compare(response2))
         .toEqual([
           { value: 'fram', diff: false },

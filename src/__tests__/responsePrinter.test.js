@@ -7,8 +7,8 @@ describe('printTable', () => {
   test('should print table with plain text when there are no differences', () => {
     const printer = new ResponsePrinter();
     const responseState = new ResponseState();
-    responseState.update(Response('pid1,frame11'))
-    responseState.update(Response('pid2,frame21'))
+    responseState.update(Response(['pid1','frame11']))
+    responseState.update(Response(['pid2','frame21']))
 
     const table = printer.printTable(responseState);
 
@@ -22,9 +22,9 @@ describe('printTable', () => {
   test('should print table with differences styled', () => {
     const printer = new ResponsePrinter();
     const responseState = new ResponseState();
-    responseState.update(Response('pid1,frame11'))
-    responseState.update(Response('pid2,frame21'))
-    responseState.update(Response('pid2,frame2X'))
+    responseState.update(Response(['pid1','frame11']))
+    responseState.update(Response(['pid2','frame21']))
+    responseState.update(Response(['pid2','frame2X']))
 
     const table = printer.printTable(responseState);
 
@@ -39,7 +39,7 @@ describe('printTable', () => {
 describe('print', () => {  
   test('should not print anything when the response is empty', () => {
     const printer = new ResponsePrinter();
-    const responses = [Response('')]
+    const responses = [Response([''])]
 
     const str = printer.printRow(responses);
 
@@ -48,7 +48,7 @@ describe('print', () => {
 
   test('should print standalone response as is', () => {
     const printer = new ResponsePrinter();
-    const responses = [Response('pid1,frame1')]
+    const responses = [Response(['pid1','frame1'])]
 
     const str = printer.printRow(responses);
 
@@ -57,7 +57,7 @@ describe('print', () => {
 
   test('should print without styling when there are no differences', () => {
     const printer = new ResponsePrinter();
-    const responses = [Response('pid1,frame1'), Response('pid1,frame1')]
+    const responses = [Response(['pid1','frame1']), Response(['pid1','frame1'])]
 
     const str = printer.printRow(responses);
 
@@ -66,7 +66,7 @@ describe('print', () => {
 
   test('should print styling when there are differences', () => {
     const printer = new ResponsePrinter();
-    const responses = [Response('pid,abc123ghi'), Response('pid,abcdefghi')]
+    const responses = [Response(['pid','abc123ghi']), Response(['pid','abcdefghi'])]
 
     const str = printer.printRow(responses);
 
@@ -75,7 +75,11 @@ describe('print', () => {
 
   test('should only print differences between two most recent responses', () => {
     const printer = new ResponsePrinter();
-    const responses = [Response('pid,abc123ghi'), Response('pid,abcdefghi'), Response('pid,abcXYZghi')]
+    const responses = [
+      Response(['pid','abc123ghi']),
+      Response(['pid','abcdefghi']),
+      Response(['pid','abcXYZghi'])
+    ]
 
     const str = printer.printRow(responses);
 

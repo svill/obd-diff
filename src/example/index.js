@@ -4,6 +4,7 @@ var btOBDReader = new OBDReader();
 var dataReceivedMarker = {};
 
 btOBDReader.on('connected', function () {
+        console.log('Connected')
         this.write("ATE1");
         this.write('ATH1');
 
@@ -16,10 +17,6 @@ btOBDReader.on('connected', function () {
 
         this.startPolling(1000); //Request all values each second.
 });
-
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
 
 // btOBDReader.on('dataReceived', function (data) {
 //     if (Object.keys(data).length !== 0) {

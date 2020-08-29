@@ -1,7 +1,7 @@
 const jsdiff = require('diff');
 
 const Response = (responseString) => {
-  const filteredFrames = responseString.split(',').filter(x => x.length)
+  const filteredFrames = responseString.filter(x => x.length)
 
   const getId = () => {
     return filteredFrames.length ? filteredFrames[0] : '';
@@ -16,11 +16,11 @@ const Response = (responseString) => {
   }
 
   const toString = () => {
-    return responseString;
+    return responseString.join(',');
   }
 
   const compare = (response2) => {
-    const diff = jsdiff.diffChars(responseString, response2.value);
+    const diff = jsdiff.diffChars(getFrames().join(), response2.value);
     return diff.filter(x => !!x.removed == false)
       .map(part => { return { 
           'value': part.value,

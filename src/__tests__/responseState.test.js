@@ -8,9 +8,9 @@ describe('ResponseState', () => {
   });
 
   describe('update', () => {
-    const RESPONSE1 = 'pid1,frame1';
-    const RESPONSE1_MODIFIED = 'pid1,frame1mod';    
-    const RESPONSE2 = 'pid2,frame21'
+    const RESPONSE1 = ['pid1','frame1'];
+    const RESPONSE1_MODIFIED = ['pid1','frame1mod'];    
+    const RESPONSE2 = ['pid2','frame21']
  
     test('should add multiple responses', () => {
       const responseState = new ResponseState();
@@ -58,7 +58,7 @@ describe('ResponseState', () => {
       const responseState = new ResponseState();
       var responsesArr = []
       for (i = 0; i < MAX_RESPONSE_HISTORY + 1; i++) {
-        responsesArr.push(Response('pid1,frame' + i));
+        responsesArr.push(Response(['pid1','frame' + i]));
       }
 
       responsesArr.map(x => responseState.update(x))
