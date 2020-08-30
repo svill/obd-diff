@@ -17,6 +17,7 @@ describe('Application', () => {
       expect(obd.isConnected()).toBe(true);
       expect(sentMessages).toContain("ATH1");
       expect(sentMessages).toContain('ATE1')
+      expect(sentMessages).toContain('ATS1')
     });
   
     test('should read PIDs from file', () => {

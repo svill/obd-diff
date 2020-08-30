@@ -19,6 +19,7 @@ module.exports = class App {
     this.obd.on(ObdDeviceEvent.CONNECTED, () => {
       this.obd.write('ATH1');
       this.obd.write('ATE1')
+      this.obd.write('ATS1')
 
       const pids = ['pid1', 'pid2']
       this.obd.pollPids(pids)
