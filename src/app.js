@@ -29,6 +29,7 @@ module.exports = class App {
     this.obd.on(ObdDeviceEvent.RESPONSE_RECEIVED, (data) => {
       const response = Response(data)
       this.responseState.update(response)
+      this.cli.clear()
       const table = this.printer.printTable(this.responseState)
       this.cli.output(table)
     });

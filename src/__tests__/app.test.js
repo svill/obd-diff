@@ -44,7 +44,7 @@ describe('Application', () => {
     }); 
   })
 
-  test('should print obd data response to console', () => {
+  test('should clear and print obd data response to console', () => {
     const obd = ObdDevice.createNull('my_address', 10);
     const cli = CommandLine.createNull();
     const app = new App(cli, obd);
@@ -59,6 +59,7 @@ describe('Application', () => {
       `pid1 | AABBCCDD${'99'.blue}FF00112233\n` +
       `pid2 | 00112233445566778899\n`
     );
+    expect(cli.getClearedCount()).toBe(3)
   });
 
   function trackSentMessages(obd) {

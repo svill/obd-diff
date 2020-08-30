@@ -9,6 +9,7 @@ module.exports = class CommandLine {
   
   constructor(cli) {
     this._cli = cli;
+    this._clearedCount = 0
   }
 
   output(text) {
@@ -19,8 +20,16 @@ module.exports = class CommandLine {
   getLastOutput() {
     return this._lastOutput;
   }
+
+  clear() {
+    this._cli.clear()
+    this._clearedCount++
+  }
+
+  getClearedCount() { return this._clearedCount }
 };
 
 class NullConsole {
   log() {}
+  clear() {}
 }
