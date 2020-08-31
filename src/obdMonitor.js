@@ -14,25 +14,43 @@ class ObdMonitor {
 
   process() {
     this.obd.on(ObdDeviceEvent.CONNECTED, () => {
-      this.obd.write('ATH1')
-      this.obd.write('ATE1')
-      this.obd.write('ATS1')
-
-      const pids = ['pid1', 'pid2']
-      this.obd.pollPids(pids)
-  
+      this.initObdConfig()
+      this.obd.addPollers(this.getPids())
       this.obd.startPolling()
     })
 
     this.obd.on(ObdDeviceEvent.RESPONSE_RECEIVED, (data) => {
-      const response = Response(data)
-      this.responseState.update(response)
-      this.cli.clear()
-      const table = this.printer.printTable(this.responseState)
-      this.cli.output(table)
+      this.updateResponseState(data)
+      this.outputTable()
     });
 
     this.obd.connect()
+  }
+
+  initObdConfig() {
+    [
+      'ATH1',
+      'ATE1',
+      'ATS1'
+    ].map(atCommand => this.obd.write(atCommand))
+  }
+
+  getPids() {
+    return [
+      'pid1',
+      'pid2'
+    ]
+  }
+
+  updateResponseState(data) {
+    const response = Response(data)
+    this.responseState.update(response)
+  }
+
+  outputTable() {
+    this.cli.clear()
+    const table = this.printer.printTable(this.responseState)
+    this.cli.output(table)
   }
 }
 

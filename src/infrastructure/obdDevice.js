@@ -66,7 +66,7 @@ class ObdDevice extends EventEmitter {
     this.emit(ObdDeviceEvent.WRITE_MSG, message);
   } 
 
-  pollPids(pids) {
+  addPollers(pids) {
     pids.map(pid => this._obd.addPollerString(pid))
   }
 

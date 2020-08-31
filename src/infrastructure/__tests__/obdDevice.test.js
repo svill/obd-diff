@@ -71,7 +71,7 @@ describe('ObdDevice', () => {
       const obd = ObdDevice.createNull();
       const pids = ['pid1', 'pid2']
 
-      obd.pollPids(pids);
+      obd.addPollers(pids);
 
       expect(obd.getActivePollers()).toEqual(pids)
     })
