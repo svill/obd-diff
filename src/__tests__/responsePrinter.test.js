@@ -30,7 +30,7 @@ describe('printTable', () => {
 
     expect(table).toBe(
       'pid1 | frame11\n' +
-      'pid2 | frame2' + colors.blue('X') + '\n'
+      'pid2 | frame2' + colors.green('X') + '\n'
     );
   });
 
@@ -70,7 +70,7 @@ describe('print', () => {
 
     const str = printer.printRow(responses);
 
-    expect(str).toBe('abc' + colors.blue('123') + 'ghi');
+    expect(str).toBe('abc' + colors.green('123') + 'ghi');
   });
 
   test('should only print differences between two most recent responses', () => {
@@ -83,6 +83,6 @@ describe('print', () => {
 
     const str = printer.printRow(responses);
 
-    expect(str).toBe('abc' + colors.blue('123') + 'ghi');
+    expect(str).toBe('abc' + colors.green('123') + 'ghi');
   });
 });

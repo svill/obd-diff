@@ -25,6 +25,6 @@ module.exports = class ResponsePrinter {
   }
 
   _styleText(text) {
-    return colors.blue(text)
+    return colors.green(text)
   }
 };

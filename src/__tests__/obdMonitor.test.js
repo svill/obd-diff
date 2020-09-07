@@ -55,7 +55,7 @@ describe('ObdMonitor', () => {
         obd.simulateResponseReceived(['pid2','00112233445566778899'])
         
         expect(cli.getLastOutput()).toBe(
-          `pid1 | AABBCCDD${'99'.blue}FF00112233\n` +
+          `pid1 | AABBCCDD${'99'.green}FF00112233\n` +
           `pid2 | 00112233445566778899\n`
         );
         expect(cli.getClearedCount()).toBe(3)
