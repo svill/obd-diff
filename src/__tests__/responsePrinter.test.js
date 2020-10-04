@@ -115,5 +115,20 @@ describe('print', () => {
   
       expect(str).toBe(`${'1'.green}A${'BB'.blue}CC${'DD'.blue}EE`);
     });
+
+    test('should emphasise with green when there is overlap between most recent and historic differences', () => {
+      const printer = new ResponsePrinter();
+      const responses = [
+        Response(['pid','1A2BCCDDEE']),
+        Response(['pid','AABBCCDDEE']),
+        Response(['pid','AABBCCXXEE']),
+        Response(['pid','AAZZCCXXEE']),
+      ]
+  
+      const str = printer.printRow(responses);
+      console.log('EXPECTED: ' + `${'1'.green}A${'2'.green}${'B'.blue}CC${'DD'.blue}EE`)
+  
+      expect(str).toBe(`${'1'.green}A${'2'.green}${'B'.blue}CC${'DD'.blue}EE`);
+    });
   });
 });

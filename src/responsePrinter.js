@@ -9,7 +9,7 @@ module.exports = class ResponsePrinter {
   }
 
   printRow(histories) {
-    let mostRecent = histories[0];
+    const mostRecent = histories[0];
     if (histories.length == 1) {
       return mostRecent.value;
     }
@@ -22,7 +22,7 @@ module.exports = class ResponsePrinter {
       // console.log(sortedOffsets)
 
       const styledStr = this._styledResponse(mostRecent, sortedOffsets);
-      // console.log(styledStr)
+      // console.log('ACTUAL:   ' + styledStr)
 
       return styledStr
     }    
@@ -46,18 +46,18 @@ module.exports = class ResponsePrinter {
 
   _styledResponse(mostRecent, uniqueOffsets) {
     let str = ""
-    let finalRun = 0
+    let currentPos = 0
     uniqueOffsets.forEach(element => {
-      const similarPart = mostRecent.value.substr(finalRun, element.offset - finalRun)
+      const similarPart = mostRecent.value.substr(currentPos, element.offset - currentPos)
       str = str + similarPart
 
       const styleFunc = element.index == 1 ? this._styleMostRecent : this._styleHistoric
-      const diffPart = styleFunc(mostRecent.value.substr(element.offset, element.length))
+      const diffPart = styleFunc(mostRecent.value.substr(currentPos > element.offset ? currentPos : element.offset, currentPos > element.offset ? element.length - (currentPos - element.offset) : element.length))
       str = str + diffPart
 
-      finalRun = element.offset + element.length
+      currentPos = element.offset + element.length
     });
-    str  = str + mostRecent.value.substr(finalRun)
+    str  = str + mostRecent.value.substr(currentPos)
     return str
   }
 
@@ -67,11 +67,6 @@ module.exports = class ResponsePrinter {
         t.offset === item.offset && 
         t.length === item.length
     )))
-  }
-
-  _styleDiff(diff) {
-    return diff.reduce((accumulator, part) => 
-      accumulator + (part.diff ? this._styleMostRecent(part.value) : part.value), '');
   }
 
   _styleMostRecent(text) {
