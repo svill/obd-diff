@@ -14,13 +14,7 @@ module.exports = class ResponsePrinter {
       return mostRecent.value;
     }
 
-    if (histories.length == 2) {
-      const previous = histories[1];
-      const diff = previous.compare(mostRecent);
-      return this._styleDiff(diff)
-    }
-
-    if (histories.length > 2) {
+    if (histories.length > 1) {
       const offsets = this._getHistoricOffsets(mostRecent, histories)
       const uniqueOffsets = this._distinctOffsets(offsets);
       
@@ -57,7 +51,7 @@ module.exports = class ResponsePrinter {
       const similarPart = mostRecent.value.substr(finalRun, element.offset - finalRun)
       str = str + similarPart
 
-      const styleFunc = element.index == 1 ? this._styleText : this._styleHistoricText
+      const styleFunc = element.index == 1 ? this._styleMostRecent : this._styleHistoric
       const diffPart = styleFunc(mostRecent.value.substr(element.offset, element.length))
       str = str + diffPart
 
@@ -77,14 +71,14 @@ module.exports = class ResponsePrinter {
 
   _styleDiff(diff) {
     return diff.reduce((accumulator, part) => 
-      accumulator + (part.diff ? this._styleText(part.value) : part.value), '');
+      accumulator + (part.diff ? this._styleMostRecent(part.value) : part.value), '');
   }
 
-  _styleText(text) {
+  _styleMostRecent(text) {
     return colors.green(text)
   }
 
-  _styleHistoricText(text) {
+  _styleHistoric(text) {
     return colors.blue(text)
   }
 };
