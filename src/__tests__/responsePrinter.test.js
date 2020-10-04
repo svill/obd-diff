@@ -64,25 +64,56 @@ describe('print', () => {
     expect(str).toBe('frame1');
   });
 
-  test('should print styling when there are differences', () => {
-    const printer = new ResponsePrinter();
-    const responses = [Response(['pid','abc123ghi']), Response(['pid','abcdefghi'])]
-
-    const str = printer.printRow(responses);
-
-    expect(str).toBe('abc' + colors.green('123') + 'ghi');
-  });
-
-  test('should only print differences between two most recent responses', () => {
-    const printer = new ResponsePrinter();
-    const responses = [
-      Response(['pid','abc123ghi']),
-      Response(['pid','abcdefghi']),
-      Response(['pid','abcXYZghi'])
-    ]
-
-    const str = printer.printRow(responses);
-
-    expect(str).toBe('abc' + colors.green('123') + 'ghi');
+  describe('emphasize differences with different colours depending on position in history', () => {
+    test('should emphasise with green when differences exist between the most recent response', () => {
+      const printer = new ResponsePrinter();
+      const responses = [
+        Response(['pid','AABBXXDDEE']),
+        Response(['pid','AABBCCDDEE'])]
+  
+      const str = printer.printRow(responses);
+  
+      expect(str).toBe(`AABB${'XX'.green}DDEE`);
+    });
+  
+    test('should emphasise with blue when differences exist between historic responses', () => {
+      const printer = new ResponsePrinter();
+      const responses = [
+        Response(['pid','AABBCCDDEE']),
+        Response(['pid','AABBCCDDEE']),
+        Response(['pid','AABBCCXXEE'])]
+  
+      const str = printer.printRow(responses);
+  
+      expect(str).toBe(`AABBCC${'DD'.blue}EE`);
+    });
+  
+    test('should emphasise with blue when differences exist between multiple historic responses', () => {
+      const printer = new ResponsePrinter();
+      const responses = [
+        Response(['pid','AABBCCDDEE']),
+        Response(['pid','AABBCCDDEE']),
+        Response(['pid','AABBCCXXEE']),
+        Response(['pid','AAZZCCXXEE']),
+      ]
+  
+      const str = printer.printRow(responses);
+  
+      expect(str).toBe(`AA${'BB'.blue}CC${'DD'.blue}EE`);
+    });
+  
+    test('should emphasise most recent differences with green and historic differences with blue', () => {
+      const printer = new ResponsePrinter();
+      const responses = [
+        Response(['pid','1ABBCCDDEE']),
+        Response(['pid','AABBCCDDEE']),
+        Response(['pid','AABBCCXXEE']),
+        Response(['pid','AAZZCCXXEE']),
+      ]
+  
+      const str = printer.printRow(responses);
+  
+      expect(str).toBe(`${'1'.green}A${'BB'.blue}CC${'DD'.blue}EE`);
+    });
   });
 });
