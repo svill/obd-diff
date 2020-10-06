@@ -19,4 +19,13 @@ describe('Application', () => {
       `pid1 | AABBCCDDEEFF00112233\n`
     );
   })
+
+  test('should print usage when given insufficient command line args', () => {
+    const cli = CommandLine.createNull([]);
+    const app = new App(cli);
+    
+    app.run();
+    
+    expect(cli.getLastOutput()).toBe('Usage: npm start [PID FILE]');
+  })
 });

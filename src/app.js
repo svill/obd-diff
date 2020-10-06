@@ -5,6 +5,7 @@ const { Config } = require('./model/config');
 const { FileSystem } = require('./infrastructure/fileSystem');
 
 const PID_FILE_ARG = 0
+const REQUIRED_ARGS = 1
 
 module.exports = class App {
   constructor(
@@ -16,8 +17,15 @@ module.exports = class App {
   }
 
   run() {
+    if (this.cli.args().length != REQUIRED_ARGS) {
+      this.printUsage()
+      return
+    }
+
     const config = new Config(FileSystem.create(this.cli.args()[PID_FILE_ARG]))
     const obdMonitor = new ObdMonitor(this.obd, this.cli, config)
-    obdMonitor.process()
+    obdMonitor.process()  
   }
+
+  printUsage() { this.cli.output('Usage: npm start [PID FILE]') }
 };
