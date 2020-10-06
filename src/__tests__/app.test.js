@@ -2,6 +2,7 @@
 
 const { ObdDevice } = require('../infrastructure/obdDevice')
 const CommandLine = require('../infrastructure/commandLine');
+const { Config } = require('../model/config');
 const colors = require('colors');
 const App = require('../app');
 
@@ -9,7 +10,8 @@ describe('Application', () => {
   test('should get configs, connect to Obd; observe responses; and output', () => {
     const obd = ObdDevice.createNull('my_address', 10);
     const cli = CommandLine.createNull();
-    const app = new App(cli, obd);
+    const config = new Config(['pid1'])
+    const app = new App(cli, obd, config);
     
     app.run();
     obd.simulateResponseReceived(['pid1','AABBCCDDEEFF00112233'])
