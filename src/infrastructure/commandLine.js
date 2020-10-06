@@ -1,14 +1,17 @@
+const FIRST_ARG_POS = 2 
+
 module.exports = class CommandLine {
-  static createNull() {
-    return new CommandLine(new NullConsole());
+  static createNull(args) {
+    return new CommandLine(new NullConsole(), new NullProcess(args));
   }
 
   static create() {
-    return new CommandLine(console);
+    return new CommandLine(console, process);
   }
   
-  constructor(cli) {
+  constructor(cli, process) {
     this._cli = cli;
+    this._process = process;
     this._clearedCount = 0
   }
 
@@ -27,9 +30,19 @@ module.exports = class CommandLine {
   }
 
   getClearedCount() { return this._clearedCount }
+
+  args() { return this._process.argv.slice(FIRST_ARG_POS) }
 };
 
 class NullConsole {
   log() {}
   clear() {}
+}
+
+class NullProcess {
+  constructor(args) {
+    this._args = args 
+  }
+  
+  get argv() { return [undefined, undefined, ...this._args] }
 }
