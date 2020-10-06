@@ -1,9 +1,7 @@
 const { ObdDevice, ObdDeviceEvent } = require('./infrastructure/obdDevice');
-const CommandLine = require('./infrastructure/commandLine');
 const { ResponseState } = require('./responseState');
 const ResponsePrinter = require('./responsePrinter');
 const Response = require('./model/response');
-const { Config } = require('./model/config');
 
 class ObdMonitor {
   constructor(obd, cli, config) {
@@ -17,7 +15,7 @@ class ObdMonitor {
   process() {
     this.obd.on(ObdDeviceEvent.CONNECTED, () => {
       this.initObdConfig();
-      this.obd.addPollers(this.getPids());
+      this.obd.addPollers(this.config.getPids());
       this.obd.startPolling();
     });
 
@@ -31,10 +29,6 @@ class ObdMonitor {
 
   initObdConfig() {
     ["ATH1", "ATE1", "ATS1"].map((atCommand) => this.obd.write(atCommand));
-  }
-
-  getPids() {
-    return this.config.getPids();
   }
 
   updateResponseState(data) {

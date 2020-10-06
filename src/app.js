@@ -4,19 +4,20 @@ const { ObdMonitor } = require('./obdMonitor');
 const { Config } = require('./model/config');
 const { FileSystem } = require('./infrastructure/fileSystem');
 
+const PID_FILE_ARG = 0
+
 module.exports = class App {
   constructor(
       cli = CommandLine.create(), 
-      obd = ObdDevice.create(),
-      config = new Config(FileSystem.create(__dirname + '/pids.txt')))
+      obd = ObdDevice.create())
   {
     this.cli = cli;
     this.obd = obd;
-    this.config = config
   }
 
   run() {
-    const obdMonitor = new ObdMonitor(this.obd, this.cli, this.config)
+    const config = new Config(FileSystem.create(this.cli.args()[PID_FILE_ARG]))
+    const obdMonitor = new ObdMonitor(this.obd, this.cli, config)
     obdMonitor.process()
   }
 };
