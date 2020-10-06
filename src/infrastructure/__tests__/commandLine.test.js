@@ -19,11 +19,6 @@ describe('CommandLine', () => {
   })
 
   describe('argv', () => {
-    test('argument is nullable', () => {
-      const commandLine = CommandLine.createNull(['null_arg'])
-      expect(commandLine.args()).toEqual(['null_arg'])
-    })
-
     test('arguments are nullable', () => {
       const commandLine = CommandLine.createNull(['null_arg1', 'null_arg2'])
       expect(commandLine.args()).toEqual(['null_arg1', 'null_arg2'])
