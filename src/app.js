@@ -2,12 +2,13 @@ const { ObdDevice } = require('./infrastructure/obdDevice');
 const CommandLine = require('./infrastructure/commandLine');
 const { ObdMonitor } = require('./obdMonitor');
 const { Config } = require('./model/config');
+const { FileSystem } = require('./infrastructure/fileSystem');
 
 module.exports = class App {
   constructor(
       cli = CommandLine.create(), 
       obd = ObdDevice.create(),
-      config = new Config(['pid1']))
+      config = new Config(FileSystem.create(__dirname + '/pids.txt')))
   {
     this.cli = cli;
     this.obd = obd;

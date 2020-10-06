@@ -3,12 +3,13 @@ const { ObdDevice, ObdDeviceEvent } = require('../infrastructure/obdDevice')
 const CommandLine = require('../infrastructure/commandLine');
 const { Config } = require('../model/config')
 const colors = require('colors');
+const { FileSystem } = require('../infrastructure/fileSystem');
 
 describe('ObdMonitor', () => {
   function createTest({
     obd = ObdDevice.createNull('my_address', 10), 
     cli = CommandLine.createNull(), 
-    config = new Config(['pid1', 'pid2'])
+    config = new Config(FileSystem.createNull('pid1\npid2'))
   }) {
       return new ObdMonitor(obd, cli, config);
   }
@@ -29,13 +30,12 @@ describe('ObdMonitor', () => {
       });
 
       test('should poll PIDs from config', () => {
-        const obdMonitor = createTest({ config: new Config(['pid3', 'pid4']) })
+        const obdMonitor = createTest({})
         const { obd } = obdMonitor
     
         obdMonitor.process();
         
-        expect(obd.getActivePollers()).toContain("pid3");
-        expect(obd.getActivePollers()).toContain("pid4");
+        expect(obd.getActivePollers()).toEqual(['pid1', 'pid2']);
       });
 
       test('should call startPolling on Obd connect', () => {
