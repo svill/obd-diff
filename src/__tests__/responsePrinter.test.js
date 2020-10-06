@@ -64,8 +64,8 @@ describe('print', () => {
     expect(str).toBe('frame1');
   });
 
-  describe('emphasize differences with different colours depending on position in history', () => {
-    test('should emphasise with green when differences exist between the most recent response', () => {
+  describe('emphasize differences with alternate colours depending on position in history', () => {
+    test('should emphasise with primary style when differences exist between the most recent response', () => {
       const printer = new ResponsePrinter();
       const responses = [
         Response(['pid','AABBXXDDEE']),
@@ -76,19 +76,7 @@ describe('print', () => {
       expect(str).toBe(`AABB${'XX'.green}DDEE`);
     });
   
-    test('should emphasise with blue when differences exist between historic responses', () => {
-      const printer = new ResponsePrinter();
-      const responses = [
-        Response(['pid','AABBCCDDEE']),
-        Response(['pid','AABBCCDDEE']),
-        Response(['pid','AABBCCXXEE'])]
-  
-      const str = printer.printRow(responses);
-  
-      expect(str).toBe(`AABBCC${'DD'.blue}EE`);
-    });
-  
-    test('should emphasise with blue when differences exist between multiple historic responses', () => {
+    test('should emphasise with secondary style when differences exist between historic responses', () => {
       const printer = new ResponsePrinter();
       const responses = [
         Response(['pid','AABBCCDDEE']),
@@ -102,10 +90,10 @@ describe('print', () => {
       expect(str).toBe(`AA${'BB'.blue}CC${'DD'.blue}EE`);
     });
   
-    test('should emphasise most recent differences with green and historic differences with blue', () => {
+    test('should emphasise most recent differences with primary style and historic differences with secondary style', () => {
       const printer = new ResponsePrinter();
       const responses = [
-        Response(['pid','1ABBCCDDEE']),
+        Response(['pid','YABBCCDDEE']),
         Response(['pid','AABBCCDDEE']),
         Response(['pid','AABBCCXXEE']),
         Response(['pid','AAZZCCXXEE']),
@@ -113,22 +101,21 @@ describe('print', () => {
   
       const str = printer.printRow(responses);
   
-      expect(str).toBe(`${'1'.green}A${'BB'.blue}CC${'DD'.blue}EE`);
+      expect(str).toBe(`${'Y'.green}A${'BB'.blue}CC${'DD'.blue}EE`);
     });
 
-    test('should emphasise with green when there is overlap between most recent and historic differences', () => {
+    test('should favour emphasis of most recent difference over that of historic ones when there is an overlap', () => {
       const printer = new ResponsePrinter();
       const responses = [
-        Response(['pid','1A2BCCDDEE']),
+        Response(['pid','AAYBCCDDEE']),
         Response(['pid','AABBCCDDEE']),
         Response(['pid','AABBCCXXEE']),
         Response(['pid','AAZZCCXXEE']),
       ]
   
       const str = printer.printRow(responses);
-      console.log('EXPECTED: ' + `${'1'.green}A${'2'.green}${'B'.blue}CC${'DD'.blue}EE`)
   
-      expect(str).toBe(`${'1'.green}A${'2'.green}${'B'.blue}CC${'DD'.blue}EE`);
+      expect(str).toBe(`AA${'Y'.green}${'B'.blue}CC${'DD'.blue}EE`);
     });
   });
 });

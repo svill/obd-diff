@@ -1,6 +1,7 @@
 require('./extension/mapExtensions');
 const colors = require('colors');
 const COL_DIVIDER = '|'
+const MOST_RECENT_IDX = 1
 
 module.exports = class ResponsePrinter {
   printTable(responseState) {
@@ -13,67 +14,77 @@ module.exports = class ResponsePrinter {
     if (histories.length == 1) {
       return mostRecent.value;
     }
-
     if (histories.length > 1) {
-      const offsets = this._getHistoricOffsets(mostRecent, histories)
-      const uniqueOffsets = this._distinctOffsets(offsets);
-      
-      const sortedOffsets = uniqueOffsets.sort((a,b) => {return a.offset - b.offset})
-      // console.log(sortedOffsets)
-
-      const styledStr = this._styledResponse(mostRecent, sortedOffsets);
-      // console.log('ACTUAL:   ' + styledStr)
-
-      return styledStr
-    }    
+      const diffs = this._getDifferencesAndSort(mostRecent, histories)
+      return this._addStyling(mostRecent, diffs);      
+    }
   }
 
-  _getHistoricOffsets(mostRecent, histories) {
-    const arrayDiff = []
-    histories.forEach((curResponse, index) => {
-      const parts = curResponse.compare(mostRecent);
-      let offset = 0
+  _getDifferencesAndSort(mostRecent, histories) {
+    const diffs = this.findDifferences(histories, mostRecent);
+    return this._distinct(diffs).sort((a,b) => {return a.offset - b.offset})
+  }
+
+  findDifferences(histories, mostRecent) {
+    const arrDiffs = [];
+    histories.forEach((response, index) => {
+      const parts = response.compare(mostRecent);
+      let currentPos = 0;
       parts.forEach(part => {
         if (part.diff) {
-          const segment = { offset: offset, length: part.value.length, index }
-          arrayDiff.push(segment)
+          arrDiffs.push({ 
+            offset: currentPos, 
+            length: part.value.length,
+            index 
+          });
         }
-        offset += part.value.length
-      })
+        currentPos += part.value.length;
+      });
     });
-    return arrayDiff;
+    return arrDiffs;
   }
 
-  _styledResponse(mostRecent, uniqueOffsets) {
-    let str = ""
-    let currentPos = 0
-    uniqueOffsets.forEach(element => {
-      const similarPart = mostRecent.value.substr(currentPos, element.offset - currentPos)
-      str = str + similarPart
-
-      const styleFunc = element.index == 1 ? this._styleMostRecent : this._styleHistoric
-      const diffPart = styleFunc(mostRecent.value.substr(currentPos > element.offset ? currentPos : element.offset, currentPos > element.offset ? element.length - (currentPos - element.offset) : element.length))
-      str = str + diffPart
-
-      currentPos = element.offset + element.length
-    });
-    str  = str + mostRecent.value.substr(currentPos)
-    return str
-  }
-
-  _distinctOffsets(arrOffsets) {
-    return arrOffsets.filter((item, index, self) =>
+  _distinct(arrDiffs) {
+    return arrDiffs.filter((item, index, self) =>
       index === self.findIndex((t) => (
         t.offset === item.offset && 
         t.length === item.length
     )))
   }
 
-  _styleMostRecent(text) {
+  _addStyling(mostRecent, diffs) {
+    let str = ""
+    let currentPos = 0
+    diffs.forEach(diff => {
+      str = str + this.identicalSection(mostRecent, currentPos, diff, str);
+
+      const differentSection = this.differentSection(mostRecent, currentPos, diff)
+      const styleFunc = diff.index == MOST_RECENT_IDX ? this._primaryStyle : this._secondaryStyle
+      str = str + styleFunc(differentSection)
+
+      currentPos = diff.offset + diff.length
+    });
+    str = str + this.remaindingSection(mostRecent, currentPos)
+    return str
+  }
+
+  identicalSection(mostRecent, currentPos, diff) {
+    return mostRecent.value.substr(currentPos, diff.offset - currentPos);
+  }
+
+  differentSection(mostRecent, currentPos, diff) {
+    return mostRecent.value.substr(currentPos > diff.offset ? currentPos : diff.offset, currentPos > diff.offset ? diff.length - (currentPos - diff.offset) : diff.length);
+  }
+
+  remaindingSection(mostRecent, currentPos) {
+    return mostRecent.value.substr(currentPos);
+  }
+
+  _primaryStyle(text) {
     return colors.green(text)
   }
 
-  _styleHistoric(text) {
+  _secondaryStyle(text) {
     return colors.blue(text)
   }
 };
