@@ -94,55 +94,5 @@ describe('Response', () => {
 
     // test('should be true when pid and frames are the same ignoring empty ones', () => {}
   });
-
-  describe('compare', () => {
-    test('should return empty when comparing empty values', () => {
-      const emptyResponse = Response([''])
-      expect(emptyResponse.compare(emptyResponse))
-        .toEqual([
-          { value: '', diff: false }
-        ]);
-    });
-  
-    test('should return single identical char', () => {
-      const response = Response(['pid','f'])
-      expect(response.compare(response))
-        .toEqual([
-          { value: 'f', diff: false }
-        ]);
-    });
-  
-    test('should return single identical string', () => {
-      const response = Response(['pid','frame'])
-      expect(response.compare(response))
-        .toEqual([
-          { value: 'frame', diff: false } 
-        ]);
-    });
-  
-    test('should return with differing char', () => {
-      const response1 = Response(['pid','frame'])
-      const response2 = Response(['pid','frXme'])
-      expect(response1.compare(response2))
-        .toEqual([
-          { value: 'fr', diff: false },
-          { value: 'X', diff: true },
-          { value: 'me', diff: false }
-        ]);
-    });
-
-    test('should return with differing portions', () => {
-      const response1 = Response(['pid','frame0frame0frame0frame0'])
-      const response2 = Response(['pid','framAAframBBframe0frame0'])
-      expect(response1.compare(response2))
-        .toEqual([
-          { value: 'fram', diff: false },
-          { value: 'AA', diff: true },
-          { value: 'fram', diff: false },
-          { value: 'BB', diff: true },
-          { value: 'frame0frame0', diff: false }
-        ]);
-    });
-  });
 });
 

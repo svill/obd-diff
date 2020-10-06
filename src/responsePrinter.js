@@ -1,4 +1,5 @@
 require('./extension/mapExtensions');
+require('./extension/stringExtensions')
 const colors = require('colors');
 const COL_DIVIDER = '|'
 const MOST_RECENT_IDX = 1
@@ -28,7 +29,7 @@ module.exports = class ResponsePrinter {
   findDifferences(histories, mostRecent) {
     const arrDiffs = [];
     histories.forEach((response, index) => {
-      const parts = response.compare(mostRecent);
+      const parts = response.value.compare(mostRecent.value);
       let currentPos = 0;
       parts.forEach(part => {
         if (part.diff) {

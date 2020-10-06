@@ -19,19 +19,8 @@ const Response = (responseString) => {
     return responseString.join(',');
   }
 
-  const compare = (response2) => {
-    const diff = jsdiff.diffChars(getFrames().join(), response2.value);
-    return diff.filter(x => !!x.removed == false)
-      .map(part => { return { 
-          'value': part.value,
-          'diff': !!part.added
-        }
-      });
-  }
-
   return {
     getId,
-    compare,
     getFrames,
     equals,
     toString,
