@@ -26,19 +26,6 @@ describe('ResponseState', () => {
         [response2.getId(), [response2]],
       ]));
     });
-  
-    test('should discard response if it is identical', () => {
-      const responseState = new ResponseState();
-      const response1 = Response(RESPONSE1);
-
-      responseState.update(response1);
-      responseState.update(response1);
-
-      expect(responseState.getState().size).toBe(1);
-      expect(responseState.getState()).toEqual(new Map([
-        [response1.getId(), [response1]],
-      ]));
-    });
 
     test('should store history of previous response if different', () => {
       const responseState = new ResponseState();
@@ -51,6 +38,34 @@ describe('ResponseState', () => {
       expect(responseState.getState().size).toBe(1);
       expect(responseState.getState()).toEqual(new Map([
         [response1.getId(), [response1Modified, response1]],
+      ]));      
+    });
+
+    test('should discard response when it is identical to most recent', () => {
+      const responseState = new ResponseState();
+      const response1 = Response(RESPONSE1);
+
+      responseState.update(response1);
+      responseState.update(response1);
+
+      expect(responseState.getState().size).toBe(1);
+      expect(responseState.getState()).toEqual(new Map([
+        [response1.getId(), [response1]],
+      ]));
+    });
+
+    test('should store response when it is different to most recent regardless of it existing previously', () => {
+      const responseState = new ResponseState();
+      const response1 = Response(RESPONSE1);
+      const response1Modified = Response(RESPONSE1_MODIFIED);
+
+      responseState.update(response1);
+      responseState.update(response1Modified);
+      responseState.update(response1);
+
+      expect(responseState.getState().size).toBe(1);
+      expect(responseState.getState()).toEqual(new Map([
+        [response1.getId(), [response1, response1Modified, response1]],
       ]));      
     });
 

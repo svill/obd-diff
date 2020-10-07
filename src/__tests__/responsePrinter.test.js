@@ -36,7 +36,7 @@ describe('printTable', () => {
 
 });
 
-describe('print', () => {  
+describe('printRow', () => {  
   test('should not print anything when the response is empty', () => {
     const printer = new ResponsePrinter();
     const responses = [Response([''])]
