@@ -15,13 +15,12 @@ module.exports = class ResponsePrinter {
     if (histories.length == 1) {
       return mostRecent.value;
     }
-    if (histories.length > 1) {
-      const diffs = this._getDifferencesAndSort(mostRecent, histories)
-      return this._addStyling(mostRecent, diffs);      
-    }
+    
+    const diffs = this._getDifferingSections(mostRecent, histories)
+    return this._addStyling(mostRecent, diffs);
   }
 
-  _getDifferencesAndSort(mostRecent, histories) {
+  _getDifferingSections(mostRecent, histories) {
     const diffs = this.findDifferences(histories, mostRecent);
     return this._distinct(diffs).sort((a,b) => {return a.offset - b.offset})
   }
@@ -54,30 +53,31 @@ module.exports = class ResponsePrinter {
   }
 
   _addStyling(mostRecent, diffs) {
-    let str = ""
     let currentPos = 0
-    diffs.forEach(diff => {
-      str = str + this.identicalSection(mostRecent, currentPos, diff, str);
-
-      const differentSection = this.differentSection(mostRecent, currentPos, diff)
-      const styleFunc = diff.index == MOST_RECENT_IDX ? this._primaryStyle : this._secondaryStyle
-      str = str + styleFunc(differentSection)
-
+    const str = diffs.reduce((acc, diff) => {
+      const _identicalSection =  this._identicalSection(mostRecent, currentPos, diff);
+      const _styledSection = this._styledSection(mostRecent, currentPos, diff);
       currentPos = diff.offset + diff.length
-    });
-    str = str + this.remaindingSection(mostRecent, currentPos)
-    return str
+      return acc + _identicalSection  + _styledSection
+    }, '');
+    return str + this.remainingSection(mostRecent, currentPos)
   }
 
-  identicalSection(mostRecent, currentPos, diff) {
+  _identicalSection(mostRecent, currentPos, diff) {
     return mostRecent.value.substr(currentPos, diff.offset - currentPos);
   }
 
-  differentSection(mostRecent, currentPos, diff) {
+  _styledSection(mostRecent, currentPos, diff) {
+    const _differentSection = this._differentSection(mostRecent, currentPos, diff);
+    const styleFunc = diff.index == MOST_RECENT_IDX ? this._primaryStyle : this._secondaryStyle;
+    return styleFunc(_differentSection);
+  }
+
+  _differentSection(mostRecent, currentPos, diff) {
     return mostRecent.value.substr(currentPos > diff.offset ? currentPos : diff.offset, currentPos > diff.offset ? diff.length - (currentPos - diff.offset) : diff.length);
   }
 
-  remaindingSection(mostRecent, currentPos) {
+  remainingSection(mostRecent, currentPos) {
     return mostRecent.value.substr(currentPos);
   }
 
